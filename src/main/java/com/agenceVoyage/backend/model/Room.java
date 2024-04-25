@@ -5,30 +5,30 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity
-@Table(name = "token")
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Getter
-@Setter
-public class Token {
+@Entity
+public class Room {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Double id;
+    private double id;
 
-    @Column(name = "token")
-    private String token;
+    @Enumerated(EnumType.STRING)
+    private RoomAvailability availability;
 
-    @Column(name = "is_logged_out")
-    private boolean loggedOut;
+
+    private int pricePerNight;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
     @JsonBackReference
-    private User user;
+    private Reservation reservation;
 
+    @ManyToOne
+    @JsonBackReference
+    private Hotel hotel;
 
 }

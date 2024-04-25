@@ -1,34 +1,29 @@
 package com.agenceVoyage.backend.model;
 
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity
-@Table(name = "token")
+import java.util.Collection;
+
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Getter
-@Setter
-public class Token {
+@Entity
+public class AirplaneCompany {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Double id;
+    private double id;
+    private String name;
 
-    @Column(name = "token")
-    private String token;
-
-    @Column(name = "is_logged_out")
-    private boolean loggedOut;
+    @ManyToMany(mappedBy = "airplaneCompanies")
+    private Collection<Service> services;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
     @JsonBackReference
-    private User user;
-
+    private Flight flight;
 
 }

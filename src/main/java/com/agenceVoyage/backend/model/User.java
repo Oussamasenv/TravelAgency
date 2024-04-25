@@ -3,10 +3,15 @@ package com.agenceVoyage.backend.model;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.format.annotation.NumberFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.List;
 
@@ -22,22 +27,42 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
+    private Double id;
 
+    @NotBlank
     @Column(name = "first_name")
+    @Size(min = 5, max = 20)
     private String firstName;
 
+    @NotBlank
     @Column(name = "last_name")
+    @Size(min = 5, max = 20)
     private String lastName;
 
-    @Column(name = "username")
+    @NotBlank
+    @Column(name = "username", unique = true)
+    @Size(min = 5, max = 20)
     private String username;
 
-    @Column(name = "password")
+    @Email
+    @NotBlank
+    @Column(unique = true)
+    private String email;
+
+    @NotBlank
+    @NumberFormat
+    @Column(length = 10, unique = true)
+    private String phoneNumber;
+
+    @Size(min = 8, max = 20)
     private String password;
 
     @Enumerated(value = EnumType.STRING)
     private Role role;
+
+    @OneToMany(mappedBy = "user")
+    @JsonManagedReference
+    private Collection<Reservation> reservations;
 
 
     @OneToMany(mappedBy = "user")
