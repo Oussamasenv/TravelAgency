@@ -1,19 +1,17 @@
 package com.agenceVoyage.backend.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class AuthenticationResponse {
     private String token;
     private String message;
 
-    public AuthenticationResponse(String token, String message) {
-        this.token = token;
-        this.message = message;
-    }
 
-    public String getToken() {
-        return token;
-    }
-
-    public String getMessage() {
-        return message;
-    }
 }
