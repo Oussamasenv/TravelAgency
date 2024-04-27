@@ -23,10 +23,6 @@ public class AirplaneCompany {
     @Size(min = 2, max = 30)
     private String name;
 
-    @ManyToMany
-    @JsonIgnore
-    private Collection<Service> services;
-
     @ManyToOne
     private Flight flight;
 

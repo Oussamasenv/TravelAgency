@@ -4,10 +4,9 @@ package com.agenceVoyage.backend.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import org.hibernate.validator.constraints.Length;
 
 import java.util.Collection;
 
@@ -27,17 +26,12 @@ public class Hotel {
     private String name;
     @NotBlank
     private String location;
-    @NotBlank
+    @NotNull
     private int starts;
-    @NotBlank
+    @NotNull
     private int roomsNumber;
 
     @OneToMany(mappedBy = "hotel")
-    @JsonIgnore
     private Collection<Room> rooms;
-
-    @ManyToMany
-    @JsonIgnore
-    private Collection<Service> services;
 
 }

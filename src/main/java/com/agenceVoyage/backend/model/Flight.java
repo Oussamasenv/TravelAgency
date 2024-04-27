@@ -4,11 +4,10 @@ import java.time.ZonedDateTime;
 import java.util.Collection;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.hibernate.sql.ast.tree.expression.Collation;
 
 
 @Getter
@@ -22,10 +21,10 @@ public class Flight {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private double id;
-    @NotBlank
+    @NotNull
     private ZonedDateTime departure;
 
-    @NotBlank
+    @NotNull
     private int duration;
 
     @Enumerated(EnumType.STRING)
@@ -34,14 +33,15 @@ public class Flight {
     @NotBlank
     private String desciption;
 
-    @NotBlank
+    @NotNull
     private double initialPrice;
 
     @Enumerated(EnumType.STRING)
     @NotBlank
     private FlightAvailibility availibility;
-
+    @NotNull
     private int groupesize;
+    @NotNull
     private int luggageCapacityPerReservation;
 
     @OneToMany(mappedBy = "flight")
@@ -61,5 +61,5 @@ public class Flight {
 
     @OneToMany
     @JsonIgnore
-    private Collection<Service> services;
+    private Collection<FlightService> flightServices;
 }

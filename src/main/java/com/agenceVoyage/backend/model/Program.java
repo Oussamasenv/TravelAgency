@@ -2,6 +2,7 @@ package com.agenceVoyage.backend.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -23,7 +24,7 @@ public class Program {
     private String name;
     @NotBlank
     private String description;
-    @NotBlank
+    @NotNull
     private int duration;
 
     @ManyToMany(mappedBy = "programs")

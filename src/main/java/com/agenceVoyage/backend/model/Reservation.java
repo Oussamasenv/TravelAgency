@@ -1,15 +1,12 @@
 package com.agenceVoyage.backend.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.hibernate.annotations.ManyToAny;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collection;
 
 
@@ -24,11 +21,11 @@ public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private double id;
-    @NotBlank
+    @NotNull
     private double totalPricing;
-    @NotBlank
+    @NotNull
     private LocalDateTime reservationDate;
-    @NotBlank
+    @NotNull
     private LocalDateTime cancelationDate;
     @NotBlank
     private String paymentInfo;
@@ -50,6 +47,6 @@ public class Reservation {
 
     @ManyToMany
     @JsonIgnore
-    private Collection<Service> services;
+    private Collection<FlightService> flightServices;
 
 }
