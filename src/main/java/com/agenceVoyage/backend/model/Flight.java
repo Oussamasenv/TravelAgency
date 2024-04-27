@@ -1,6 +1,7 @@
 package com.agenceVoyage.backend.model;
 
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -27,25 +28,35 @@ public class Flight {
     @NotNull
     private int duration;
 
+    @NotNull
+    private ZonedDateTime returnDate;
+
+    @Enumerated(EnumType.STRING)
+    private FacilityPricingType facilityPricingType;
+
     @Enumerated(EnumType.STRING)
     private FlightType type;
 
+    private int facilityDays;
+
     @NotBlank
-    private String desciption;
+    private String description;
 
     @NotNull
     private double initialPrice;
 
     @Enumerated(EnumType.STRING)
-    @NotBlank
-    private FlightAvailibility availibility;
+    private FlightAvailibility availability;
+
     @NotNull
-    private int groupesize;
+    private int groupSize;
+
     @NotNull
     private int luggageCapacityPerReservation;
 
+
     @OneToMany(mappedBy = "flight")
-    private Collection<Reservation> reservationCollation;
+    private Collection<Reservation> reservations;
 
     @OneToMany(mappedBy = "flight")
     @JsonIgnore
@@ -61,5 +72,5 @@ public class Flight {
 
     @OneToMany
     @JsonIgnore
-    private Collection<FlightService> flightServices;
+    private Collection<Facility> facilities;
 }

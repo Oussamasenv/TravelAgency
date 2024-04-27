@@ -2,7 +2,6 @@ package com.agenceVoyage.backend.model;
 
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -14,7 +13,7 @@ import lombok.*;
 @Builder
 @Entity
 
-public class FlightService {
+public class Facility {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +22,9 @@ public class FlightService {
     private String name;
     @NotNull
     private double basePricePerDay;
+//
+//    @NotNull
+//    private FacilityPricingType facilityPricingType;
 
 
 //    @ManyToMany(mappedBy = "services")

@@ -47,6 +47,6 @@ public class Reservation {
 
     @ManyToMany
     @JsonIgnore
-    private Collection<FlightService> flightServices;
+    private Collection<Facility> facilities;
 
 }

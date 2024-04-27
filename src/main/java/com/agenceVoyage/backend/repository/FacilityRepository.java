@@ -1,9 +1,9 @@
 package com.agenceVoyage.backend.repository;
 
-import com.agenceVoyage.backend.model.FlightService;
+import com.agenceVoyage.backend.model.Facility;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface FlightServiceRepository extends JpaRepository<FlightService, Long> {
+public interface FacilityRepository extends JpaRepository<Facility, Long> {
 }

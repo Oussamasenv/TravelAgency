@@ -4,22 +4,22 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
-@NoArgsConstructor
+
 @Data
 public class DurationPricingStrategy implements ServicePricing{
 
-    private double discountRate;
+    public static double calculatePricing(int duration, double basePricePerDay, double daysOfService) {
 
-    @Override
-    public double calculatePricing(int duration, double basePricePerDay, int daysOfService) {
+        double discountRate;
 
-        if( daysOfService > 8 && daysOfService <20 ){
+        if( duration >= 8 && duration <20 ){
             discountRate = 0.1;
-        } else if (daysOfService > 20 && daysOfService <40 ){
+        } else if (duration >= 20 && duration <40 ){
             discountRate = 0.2;
-        } else {
+        } else if (duration >= 40 ){
             discountRate = 0.3;
+        }else {
+            discountRate =  0;
         }
 
         double basePrice = duration * basePricePerDay;
