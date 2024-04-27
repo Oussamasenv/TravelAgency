@@ -1,7 +1,10 @@
 package com.agenceVoyage.backend.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.util.Collection;
@@ -17,13 +20,14 @@ public class AirplaneCompany {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private double id;
+    @Size(min = 2, max = 30)
     private String name;
 
-    @ManyToMany(mappedBy = "airplaneCompanies")
+    @ManyToMany
+    @JsonIgnore
     private Collection<Service> services;
 
     @ManyToOne
-    @JsonBackReference
     private Flight flight;
 
 }

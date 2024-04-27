@@ -1,17 +1,15 @@
 package com.agenceVoyage.backend.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.format.annotation.NumberFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.List;
 
@@ -29,17 +27,14 @@ public class User implements UserDetails {
     @Column(name = "id")
     private Double id;
 
-    @NotBlank
     @Column(name = "first_name")
     @Size(min = 5, max = 20)
     private String firstName;
 
-    @NotBlank
     @Column(name = "last_name")
     @Size(min = 5, max = 20)
     private String lastName;
 
-    @NotBlank
     @Column(name = "username", unique = true)
     @Size(min = 5, max = 20)
     private String username;
@@ -49,24 +44,23 @@ public class User implements UserDetails {
     @Column(unique = true)
     private String email;
 
-    @NotBlank
     @NumberFormat
     @Column(length = 10, unique = true)
     private String phoneNumber;
 
-    @Size(min = 8, max = 20)
+    @NotBlank
     private String password;
 
     @Enumerated(value = EnumType.STRING)
     private Role role;
 
     @OneToMany(mappedBy = "user")
-    @JsonManagedReference
+    @JsonIgnore
     private Collection<Reservation> reservations;
 
 
     @OneToMany(mappedBy = "user")
-    @JsonManagedReference
+    @JsonIgnore
     private List<Token> tokens;
 
     @Override

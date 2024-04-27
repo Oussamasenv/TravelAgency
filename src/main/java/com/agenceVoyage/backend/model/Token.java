@@ -2,6 +2,7 @@ package com.agenceVoyage.backend.model;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,7 +28,6 @@ public class Token {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonBackReference
     private User user;
 
 

@@ -1,8 +1,10 @@
 package com.agenceVoyage.backend.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.hibernate.annotations.ManyToAny;
 
@@ -22,27 +24,32 @@ public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private double id;
+    @NotBlank
     private double totalPricing;
+    @NotBlank
     private LocalDateTime reservationDate;
+    @NotBlank
     private LocalDateTime cancelationDate;
+    @NotBlank
     private String paymentInfo;
 
     @ManyToOne
-    @JsonBackReference
     private User user;
 
     @ManyToMany(mappedBy = "reservations")
+    @JsonIgnore
     private Collection<Traveler> travelers;
 
     @ManyToOne
-    @JsonBackReference
+    @JsonIgnore
     private Flight flight;
 
-    @OneToMany(mappedBy = "reservation")
-    @JsonManagedReference
+    @OneToMany
+    @JsonIgnore
     private Collection<Room> rooms;
 
     @ManyToMany
+    @JsonIgnore
     private Collection<Service> services;
 
 }

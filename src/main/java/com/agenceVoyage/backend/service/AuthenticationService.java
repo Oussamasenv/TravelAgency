@@ -43,14 +43,15 @@ public class AuthenticationService {
             return new AuthenticationResponse(null, "User already exist");
         }
 
-        User user = new User();
-        user.setFirstName(request.getFirstName());
-        user.setLastName(request.getLastName());
-        user.setUsername(request.getUsername());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-
-
-        user.setRole(request.getRole());
+        User user = new User().builder()
+                .firstName(request.getFirstName())
+                .lastName(request.getLastName())
+                .username(request.getUsername())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .phoneNumber(request.getPhoneNumber())
+                .email(request.getEmail())
+                .role(request.getRole())
+                .build();
 
         user = repository.save(user);
 
