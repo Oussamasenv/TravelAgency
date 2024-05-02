@@ -17,18 +17,24 @@ public class Traveler {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private double id;
+    private long id;
+
     @Size(min = 2, max = 50)
     private String name;
+
     @Size(min = 2, max = 50)
     private String lastName;
+
     @NotNull
     private int age;
+
     @NotBlank
+    @Column(unique = true)
     private String identity;
+
     @NotBlank
     private String luggage;
 
-    @ManyToMany
-    private Collection<Reservation> reservations;
+//    @ManyToMany
+//    private Collection<Reservation> reservations;
 }

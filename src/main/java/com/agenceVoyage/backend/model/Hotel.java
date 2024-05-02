@@ -20,18 +20,23 @@ public class Hotel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private double id;
+    private long id;
 
     @Size(min = 8, max = 50)
+    @Column(unique = true)
     private String name;
+
     @NotBlank
     private String location;
+
     @NotNull
     private int starts;
+
     @NotNull
     private int roomsNumber;
 
     @OneToMany(mappedBy = "hotel")
+    @JsonIgnore
     private Collection<Room> rooms;
 
 }

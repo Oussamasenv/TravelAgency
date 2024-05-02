@@ -12,16 +12,22 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @Entity
-
 public class Facility {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private double id;
+    private long id;
+
     @Size(min = 2, max = 30)
+    @Column(unique = true)
     private String name;
+
     @NotNull
     private double basePricePerDay;
+
+    @Enumerated(EnumType.STRING)
+    private FacilityPricingType facilityPricingType;
+
 //
 //    @NotNull
 //    private FacilityPricingType facilityPricingType;

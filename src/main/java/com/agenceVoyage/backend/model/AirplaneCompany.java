@@ -19,8 +19,9 @@ public class AirplaneCompany {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private double id;
+    private long id;
     @Size(min = 2, max = 30)
+    @Column(unique = true)
     private String name;
 
     @ManyToOne

@@ -25,7 +25,7 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Double id;
+    private long id;
 
     @Column(name = "first_name")
     @Size(min = 5, max = 20)
@@ -54,9 +54,9 @@ public class User implements UserDetails {
     @Enumerated(value = EnumType.STRING)
     private Role role;
 
-    @OneToMany(mappedBy = "user")
+    @OneToOne(mappedBy = "user")
     @JsonIgnore
-    private Collection<Reservation> reservations;
+    private Reservation reservation;
 
 
     @OneToMany(mappedBy = "user")

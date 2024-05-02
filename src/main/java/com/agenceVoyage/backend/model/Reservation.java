@@ -1,5 +1,6 @@
 package com.agenceVoyage.backend.model;
 
+import com.agenceVoyage.backend.designpatterns.prototype.ReservationPrototype;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -7,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 
 
@@ -20,32 +22,32 @@ public class Reservation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private double id;
+    private long id;
     @NotNull
     private double totalPricing;
     @NotNull
     private LocalDateTime reservationDate;
-    @NotNull
-    private LocalDateTime cancelationDate;
-    @NotBlank
+
+    private LocalDateTime cancellationDate;
+
     private String paymentInfo;
 
-    @ManyToOne
+    @OneToOne
     private User user;
 
-    @ManyToMany(mappedBy = "reservations")
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JsonIgnore
     private Collection<Traveler> travelers;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JsonIgnore
     private Flight flight;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.PERSIST)
     @JsonIgnore
     private Collection<Room> rooms;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JsonIgnore
     private Collection<Facility> facilities;
 

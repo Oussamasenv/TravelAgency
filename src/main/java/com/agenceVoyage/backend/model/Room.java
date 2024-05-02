@@ -18,9 +18,9 @@ public class Room {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private double id;
+    private long id;
 
-    @NotBlank
+    @NotNull
     @Enumerated(EnumType.STRING)
     private RoomAvailability availability;
 

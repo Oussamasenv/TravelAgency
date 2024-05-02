@@ -7,6 +7,7 @@ import java.util.Collection;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -17,22 +18,21 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @Entity
+@ToString
 public class Flight {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private double id;
+    private long id;
+
     @NotNull
     private ZonedDateTime departure;
 
     @NotNull
     private int duration;
 
-    @NotNull
-    private ZonedDateTime returnDate;
 
-    @Enumerated(EnumType.STRING)
-    private FacilityPricingType facilityPricingType;
+    private ZonedDateTime returnDate;
 
     @Enumerated(EnumType.STRING)
     private FlightType type;
@@ -52,7 +52,10 @@ public class Flight {
     private int groupSize;
 
     @NotNull
+    private int placesLeft;
+
     private int luggageCapacityPerReservation;
+
 
 
     @OneToMany(mappedBy = "flight")

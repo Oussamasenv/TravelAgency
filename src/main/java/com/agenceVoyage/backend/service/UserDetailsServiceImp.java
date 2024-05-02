@@ -1,5 +1,6 @@
 package com.agenceVoyage.backend.service;
 
+import com.agenceVoyage.backend.model.Reservation;
 import com.agenceVoyage.backend.model.User;
 import com.agenceVoyage.backend.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,6 +31,30 @@ public class UserDetailsServiceImp implements UserDetailsService {
 
 
     }
+
+    public Optional<User> findUser(String username) {
+        return repository.findByUsername(username);
+    }
+
+
+    public User saveUser(User user) {
+        return repository.save(user);
+    }
+
+
+    public User setUserToReservation(User user, Reservation reservation) {
+
+        user.setReservation(reservation);
+        return repository.save(user);
+
+    }
+
+
+    public User getUser(long id){
+        return repository.getReferenceById(id);
+    }
+
+
 
 
 

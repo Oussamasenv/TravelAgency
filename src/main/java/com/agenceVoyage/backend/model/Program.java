@@ -19,11 +19,15 @@ public class Program {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private double id;
+    private long id;
+
     @Size(min = 2, max = 50)
+    @Column(unique = true)
     private String name;
+
     @NotBlank
     private String description;
+
     @NotNull
     private int duration;
 
