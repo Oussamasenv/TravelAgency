@@ -3,12 +3,11 @@ package com.agenceVoyage.backend.model;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 
@@ -19,21 +18,23 @@ import lombok.*;
 @Builder
 @Entity
 @ToString
-public class Flight {
+public class Travel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @NotNull
+    @FutureOrPresent
     private ZonedDateTime departure;
 
     @NotNull
+    @Min(1)
     private int duration;
-
 
     private ZonedDateTime returnDate;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     private FlightType type;
 
@@ -43,29 +44,30 @@ public class Flight {
     private String description;
 
     @NotNull
+    @DecimalMin(value = "0.0")
     private double initialPrice;
 
     @Enumerated(EnumType.STRING)
     private FlightAvailibility availability;
 
     @NotNull
+    @Min(1)
     private int groupSize;
 
     @NotNull
     private int placesLeft;
 
-    private int luggageCapacityPerReservation;
 
 
-
-    @OneToMany(mappedBy = "flight")
+    @OneToMany(mappedBy = "travel")
     private Collection<Reservation> reservations;
 
-    @OneToMany(mappedBy = "flight")
+    @ManyToOne
     @JsonIgnore
-    private Collection<AirplaneCompany> airplaneCompanyCollation;
+    @NotNull
+    private AirplaneCompany airplaneCompany;
 
-    @ManyToMany
+    @OneToMany
     @JsonIgnore
     private Collection<Program> programs;
 

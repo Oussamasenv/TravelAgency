@@ -39,6 +39,14 @@ public class RoomServiceImp implements RoomService {
         return facilitiesPricing;
     }
 
+    public void setRoomsToCancelReservation(ConcurrentLinkedDeque<Room> rooms) {
+
+        for (Room room : rooms) {
+            room.setAvailability(RoomAvailability.AVAILABLE);
+        }
+        roomRepository.saveAll(rooms);
+    }
+
     @Override
     public List<Room> findAllByIds(List<Long> ids) {
         return roomRepository.findAllById(ids);

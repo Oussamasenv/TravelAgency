@@ -10,5 +10,7 @@ public interface RoomService {
 
     public double setRoomsToReserve(ConcurrentLinkedDeque<Room> rooms, int duration);
 
+    public void setRoomsToCancelReservation(ConcurrentLinkedDeque<Room> rooms);
+
     public List<Room> findAllByIds(List<Long> ids);
 }

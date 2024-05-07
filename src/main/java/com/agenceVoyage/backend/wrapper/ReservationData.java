@@ -3,9 +3,6 @@ package com.agenceVoyage.backend.wrapper;
 import com.agenceVoyage.backend.model.*;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 @Getter
@@ -20,7 +17,7 @@ public class ReservationData {
 //    private ConcurrentLinkedDeque<Traveler> travelers;
 //    private long userId;
 
-    private Flight flight;
+    private Travel travel;
     private ConcurrentLinkedDeque<Room> rooms;
     private ConcurrentLinkedDeque<Facility> facilities;
     private ConcurrentLinkedDeque<Traveler> travelers;

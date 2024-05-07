@@ -1,32 +1,34 @@
 package com.agenceVoyage.backend.service.implementations;
 
-import com.agenceVoyage.backend.designpatterns.facade.ReservationFacade;
-import com.agenceVoyage.backend.dto.UserDto;
 import com.agenceVoyage.backend.model.*;
 import com.agenceVoyage.backend.repository.ReservationRepository;
 import com.agenceVoyage.backend.service.interfaces.FacilityService;
 import com.agenceVoyage.backend.service.interfaces.ReservationService;
 import com.agenceVoyage.backend.service.interfaces.RoomService;
+import com.agenceVoyage.backend.wrapper.ReservationData;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Collection;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 @Service
 
-@NoArgsConstructor
+
 public class ReservationServiceImp implements ReservationService {
 
     @Autowired
     private ReservationRepository reservationRepository;
 
-    @Autowired
-    private FacilityService facilityService;
+    private final FacilityService facilityService;
+
 
     public ReservationServiceImp(
+            RoomServiceImp roomServiceImp,
             FacilityServiceImp facilityServiceImp
     ){
         this.facilityService = facilityServiceImp;
@@ -43,7 +45,7 @@ public class ReservationServiceImp implements ReservationService {
     @Override
     public Reservation setReservationToReserve(
 
-            Flight flight,
+            Travel travel,
             double roomsPricing,
             ConcurrentLinkedDeque<Facility> facilities,
             ConcurrentLinkedDeque<Traveler> travelers,
@@ -53,8 +55,8 @@ public class ReservationServiceImp implements ReservationService {
     {
         Reservation reservation = new Reservation();
 
-        double totalPricing = flight.getInitialPrice();
-        totalPricing += facilityService.setFacilitiesToReserve(facilities, flight);
+        double totalPricing = travel.getInitialPrice();
+        totalPricing += facilityService.setFacilitiesToReserve(facilities, travel);
         totalPricing += roomsPricing;
 
         reservation.setTotalPricing(totalPricing);
@@ -64,10 +66,34 @@ public class ReservationServiceImp implements ReservationService {
         reservation.setTravelers(travelers);
         reservation.setFacilities(facilities);
         reservation.setUser(user);
-        reservation.setFlight(flight);
+        reservation.setTravel(travel);
+        reservation.setReservationStatus(ReservationStatus.RESERVATION_PASSED);
 
         return reservationRepository.save(reservation);
 
     }
+
+    @Override
+    public Reservation cancelReservation(long id) {
+
+        Reservation reservation = reservationRepository.getReferenceById(id);
+
+        long daysUntilDeparture = ChronoUnit.DAYS.between(reservation.getTravel().getDeparture(), LocalDateTime.now());
+
+
+        if(daysUntilDeparture > 7) {
+            reservation.setReservationStatus(ReservationStatus.RESERVATION_CANCELED);
+            reservationRepository.save(reservation);
+            return reservation;
+        } else {
+            throw new RuntimeException("You can't cancel a reservation until 7 days before departure");
+        }
+    }
+
+    @Override
+    public Reservation getReservationById(long id) {
+        return reservationRepository.getReferenceById(id);
+    }
+
 
 }

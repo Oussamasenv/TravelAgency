@@ -1,13 +1,10 @@
 package com.agenceVoyage.backend.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
-import java.util.Collection;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 @Getter
 @Setter
@@ -20,11 +17,13 @@ public class AirplaneCompany {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+
     @Size(min = 2, max = 30)
     @Column(unique = true)
     private String name;
 
-    @ManyToOne
-    private Flight flight;
+    @OneToMany(mappedBy = "airplaneCompany")
+    private ConcurrentLinkedDeque<Travel> travels;
 
 }

@@ -4,6 +4,8 @@ package com.agenceVoyage.backend.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -25,9 +27,12 @@ public class Room {
     private RoomAvailability availability;
 
     @NotNull
+    @Min(0)
     private int roomNumber;
+
     @NotNull
-    private int pricePerNight;
+    @DecimalMin(value = "0.0")
+    private double pricePerNight;
 
 
     @ManyToOne

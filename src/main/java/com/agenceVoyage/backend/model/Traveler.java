@@ -32,9 +32,5 @@ public class Traveler {
     @Column(unique = true)
     private String identity;
 
-    @NotBlank
-    private String luggage;
 
-//    @ManyToMany
-//    private Collection<Reservation> reservations;
 }

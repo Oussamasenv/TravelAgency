@@ -3,6 +3,7 @@ package com.agenceVoyage.backend.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -30,13 +31,16 @@ public class Hotel {
     private String location;
 
     @NotNull
+    @Min(0)
     private int starts;
 
     @NotNull
+    @Min(0)
     private int roomsNumber;
 
     @OneToMany(mappedBy = "hotel")
     @JsonIgnore
+    @NotNull
     private Collection<Room> rooms;
 
 }
