@@ -3,9 +3,13 @@ package com.agenceVoyage.backend.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.NumberFormat;
 
+@Getter
+@Setter
 public class AuthRegisterDto {
 
     private long id;

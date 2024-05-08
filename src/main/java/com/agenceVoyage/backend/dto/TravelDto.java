@@ -4,9 +4,14 @@ import com.agenceVoyage.backend.model.FlightAvailibility;
 import com.agenceVoyage.backend.model.FlightType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.ZonedDateTime;
 
+
+@Getter
+@Setter
 public class TravelDto {
 
     @Id

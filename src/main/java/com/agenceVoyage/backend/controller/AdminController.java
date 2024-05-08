@@ -1,5 +1,6 @@
 package com.agenceVoyage.backend.controller;
 
+import com.agenceVoyage.backend.dto.FacilityDto;
 import com.agenceVoyage.backend.model.*;
 import com.agenceVoyage.backend.service.implementations.*;
 import com.agenceVoyage.backend.service.interfaces.*;
@@ -8,10 +9,15 @@ import com.agenceVoyage.backend.wrapper.TravelData;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
 
 
 @RestController
@@ -51,11 +57,13 @@ public class AdminController {
     }
 
 
-    @PostMapping("/createService")
+    @PostMapping("/createFacility")
     @Transactional
-    public ResponseEntity<Facility> createService(@Valid @RequestBody Facility facility) {
+    public ResponseEntity<?> createService(
+            @Valid @RequestBody FacilityDto facilityDto
+            ) {
 
-            return ResponseEntity.ok(facilityService.createService(facility));
+            return ResponseEntity.ok(facilityService.createService(facilityDto));
 
     }
 

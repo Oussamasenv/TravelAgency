@@ -4,6 +4,8 @@ package com.agenceVoyage.backend.service.implementations;
 import com.agenceVoyage.backend.designpatterns.strategy.DailyPricingStartegy;
 import com.agenceVoyage.backend.designpatterns.strategy.DurationPricingStrategy;
 import com.agenceVoyage.backend.designpatterns.strategy.ServicePricing;
+import com.agenceVoyage.backend.dto.FacilityDto;
+import com.agenceVoyage.backend.mapper.FacilityMapper;
 import com.agenceVoyage.backend.model.Facility;
 import com.agenceVoyage.backend.model.FacilityPricingType;
 import com.agenceVoyage.backend.model.Travel;
@@ -19,13 +21,16 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 public class FacilityServiceImp implements FacilityService {
 
     @Autowired
+    private FacilityMapper facilityMapper;
+
+    @Autowired
     private FacilityRepository facilityRepository;
 
 
     @Override
-    public Facility createService(Facility facility) {
+    public FacilityDto createService(FacilityDto facilityDto) {
 
-        return facilityRepository.save(facility);
+        return facilityMapper.facilityToFacilityDto(facilityRepository.save(facilityMapper.facilityDtoToFacility(facilityDto)));
     }
 
     @Override
