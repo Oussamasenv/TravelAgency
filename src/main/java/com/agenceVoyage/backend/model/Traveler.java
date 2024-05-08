@@ -20,9 +20,11 @@ public class Traveler {
     private long id;
 
     @Size(min = 2, max = 50)
+    @NotBlank
     private String name;
 
     @Size(min = 2, max = 50)
+    @NotBlank
     private String lastName;
 
     @NotNull

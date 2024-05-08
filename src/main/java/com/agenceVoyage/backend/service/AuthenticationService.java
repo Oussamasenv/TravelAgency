@@ -69,6 +69,7 @@ public class AuthenticationService {
                         request.getUsername(),
                         request.getPassword()
                 )
+
         );
 
         User user = repository.findByUsername(request.getUsername()).orElseThrow();

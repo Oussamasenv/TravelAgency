@@ -1,24 +1,13 @@
-package com.agenceVoyage.backend.model;
+package com.agenceVoyage.backend.dto;
 
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.concurrent.ConcurrentLinkedDeque;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.agenceVoyage.backend.model.FlightAvailibility;
+import com.agenceVoyage.backend.model.FlightType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.*;
 
+import java.time.ZonedDateTime;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-@Entity
-@ToString
-public class Travel {
+public class TravelDto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +17,8 @@ public class Travel {
     @FutureOrPresent
     private ZonedDateTime departure;
 
-
+    @NotNull
+    @Min(1)
     private int duration;
 
     private ZonedDateTime returnDate;
@@ -53,22 +43,7 @@ public class Travel {
     @Min(1)
     private int groupSize;
 
-    private int placesLeft;
-
-
-
-    @OneToMany(mappedBy = "travel")
-    private Collection<Reservation> reservations;
-
-    @ManyToOne
-    @JsonIgnore
     @NotNull
-    private AirplaneCompany airplaneCompany;
-
-    @OneToMany
-    @JsonIgnore
-    private Collection<Program> programs;
-
-
+    private int placesLeft;
 
 }
