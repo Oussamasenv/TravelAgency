@@ -1,5 +1,7 @@
 package com.agenceVoyage.backend.service.implementations;
 
+import com.agenceVoyage.backend.dto.AirplaneCompanyDto;
+import com.agenceVoyage.backend.dto.ProgramDto;
 import com.agenceVoyage.backend.dto.TravelDto;
 import com.agenceVoyage.backend.model.*;
 import com.agenceVoyage.backend.repository.TravelRepository;
@@ -10,6 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.awt.*;
 import java.time.ZonedDateTime;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -71,26 +74,28 @@ public class TravelServiceImp implements TravelService {
     @Override
     public TravelData createTravel(TravelData travelData) {
 
-        Travel travel = travelData.getTravel();
-//        AirplaneCompany airplaneCompany = travelData.getAirplaneCompany();
+        TravelDto travelDto = travelData.getTravelDto();
+        AirplaneCompanyDto airplaneCompanyDto = travelData.getAirplaneCompanyDto();
 
-        ConcurrentLinkedQueue<Program> programs = travelData.getPrograms();
+
+        ConcurrentLinkedQueue<ProgramDto> programDtos = travelData.getProgramDtos();
 
         int duration = 0;
 
-        for(Program program : programs) {
-            duration += program.getDuration();
+        for(ProgramDto programDto : programDtos) {
+            duration += programDto.getDuration();
         }
 
 
-        ZonedDateTime returnDate = travel.getDeparture().plusDays(travel.getDuration());
-        travel.setAvailability(FlightAvailibility.AVAILABLE);
-        travel.setPlacesLeft(travel.getGroupSize());
-        travel.setDuration(duration);
-        travel.setReturnDate(returnDate);
-        travel.setPrograms(travelData.getPrograms());
-        travel.setAirplaneCompany(travelData.getAirplaneCompany());
-        travelRepository.save(travel);
+        ZonedDateTime returnDate = travelDto.getDeparture().plusDays(travelDto.getDuration());
+        travelDto.setAvailability(FlightAvailibility.AVAILABLE);
+        travelDto.setPlacesLeft(travelDto.getGroupSize());
+        travelDto.setDuration(duration);
+        travelDto.setReturnDate(returnDate);
+        travelDto.setProgramDtos(travelData.getProgramDtos());
+        travelDto.setAirplaneCompanyDto(airplaneCompanyDto);
+        travelRepository.save(modelMapper.map(travelDto, Travel.class));
+
 
         return travelData;
 

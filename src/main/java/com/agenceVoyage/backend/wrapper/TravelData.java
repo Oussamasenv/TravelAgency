@@ -1,5 +1,8 @@
 package com.agenceVoyage.backend.wrapper;
 
+import com.agenceVoyage.backend.dto.AirplaneCompanyDto;
+import com.agenceVoyage.backend.dto.ProgramDto;
+import com.agenceVoyage.backend.dto.TravelDto;
 import com.agenceVoyage.backend.model.AirplaneCompany;
 import com.agenceVoyage.backend.model.Program;
 import com.agenceVoyage.backend.model.Travel;
@@ -15,8 +18,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class TravelData {
 
 
-    private Travel travel;
-    private ConcurrentLinkedQueue<Program> programs;
-    private AirplaneCompany airplaneCompany;
+    private TravelDto travelDto;
+    private ConcurrentLinkedQueue<ProgramDto> programDtos;
+    private AirplaneCompanyDto airplaneCompanyDto;
 
 }

@@ -55,6 +55,6 @@ public class TravelDto {
     @NotNull
     private AirplaneCompanyDto airplaneCompanyDto;
 
-    private Collection<ProgramDto> programsDto;
+    private Collection<ProgramDto> programDtos;
 
 }

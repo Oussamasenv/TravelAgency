@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.util.Collection;
 import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Getter
 @Setter
@@ -23,7 +25,5 @@ public class AirplaneCompany {
     @Column(unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "airplaneCompany")
-    private ConcurrentLinkedDeque<Travel> travels;
 
 }

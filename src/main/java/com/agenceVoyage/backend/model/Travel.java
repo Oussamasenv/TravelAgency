@@ -53,6 +53,10 @@ public class Travel {
     private int placesLeft;
 
     @ManyToOne
+    @JoinColumn(
+            name = "airplane_company_id",
+            referencedColumnName = "id"
+    )
     @JsonIgnore
     @NotNull
     private AirplaneCompany airplaneCompany;

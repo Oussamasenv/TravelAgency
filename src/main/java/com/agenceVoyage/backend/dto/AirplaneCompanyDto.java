@@ -16,6 +16,4 @@ public class AirplaneCompanyDto {
     private String name;
 
 
-    private Collection<TravelDto> travelsDto;
-
 }
