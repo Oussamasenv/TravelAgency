@@ -38,6 +38,4 @@ public class Room {
     @ManyToOne
     private Hotel hotel;
 
-
-
 }

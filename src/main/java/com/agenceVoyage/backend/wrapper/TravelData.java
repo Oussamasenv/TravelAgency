@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 
 @Getter
@@ -15,7 +16,7 @@ public class TravelData {
 
 
     private Travel travel;
-    private ConcurrentLinkedDeque<Program> programs;
+    private ConcurrentLinkedQueue<Program> programs;
     private AirplaneCompany airplaneCompany;
 
 }

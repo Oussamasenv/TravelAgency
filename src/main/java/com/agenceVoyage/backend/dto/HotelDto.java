@@ -1,9 +1,6 @@
 package com.agenceVoyage.backend.dto;
 
-import com.agenceVoyage.backend.model.Room;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Column;
-import jakarta.persistence.OneToMany;
+
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -34,6 +31,6 @@ public class HotelDto {
     private int roomsNumber;
 
     @NotNull
-    private Collection<Room> rooms;
+    private Collection<RoomDto> rooms;
 
 }

@@ -1,20 +1,16 @@
 package com.agenceVoyage.backend.service.implementations;
 
+import com.agenceVoyage.backend.dto.*;
 import com.agenceVoyage.backend.model.*;
 import com.agenceVoyage.backend.repository.ReservationRepository;
 import com.agenceVoyage.backend.service.interfaces.FacilityService;
 import com.agenceVoyage.backend.service.interfaces.ReservationService;
-import com.agenceVoyage.backend.service.interfaces.RoomService;
-import com.agenceVoyage.backend.wrapper.ReservationData;
-import lombok.NoArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.Collection;
-import java.util.Optional;
-import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Service
 
@@ -25,6 +21,8 @@ public class ReservationServiceImp implements ReservationService {
     private ReservationRepository reservationRepository;
 
     private final FacilityService facilityService;
+    @Autowired
+    private ModelMapper modelMapper;
 
 
     public ReservationServiceImp(
@@ -38,61 +36,59 @@ public class ReservationServiceImp implements ReservationService {
 
 
     @Override
-    public Reservation save(Reservation reservation) {
-        return reservationRepository.save(reservation);
+    public ReservationDto save(ReservationDto reservationDto) {
+
+        return modelMapper.map(reservationRepository.save(modelMapper.map(reservationDto, Reservation.class)), ReservationDto.class);
     }
 
     @Override
-    public Reservation setReservationToReserve(
-
-            Travel travel,
+    public ReservationDto setReservationToReserve(
+            TravelDto travelDto,
             double roomsPricing,
-            ConcurrentLinkedDeque<Facility> facilities,
-            ConcurrentLinkedDeque<Traveler> travelers,
-            ConcurrentLinkedDeque<Room> rooms,
-            User user)
+            ConcurrentLinkedQueue<FacilityDto> facilityDtos,
+            ConcurrentLinkedQueue<TravelerDto> travelerDtos,
+            ConcurrentLinkedQueue<RoomDto> roomDtos,
+            User user
+            )
 
     {
-        Reservation reservation = new Reservation();
+        ReservationDto reservationDto = new ReservationDto();
 
-        double totalPricing = travel.getInitialPrice();
-        totalPricing += facilityService.setFacilitiesToReserve(facilities, travel);
+        double totalPricing = travelDto.getInitialPrice();
+        totalPricing += facilityService.setFacilitiesToReserve(facilityDtos, travelDto);
         totalPricing += roomsPricing;
 
-        reservation.setTotalPricing(totalPricing);
-        reservation.setReservationDate(LocalDateTime.now());
+        reservationDto.setTotalPricing(totalPricing);
+        reservationDto.setReservationDate(LocalDateTime.now());
 
-        reservation.setRooms(rooms);
-        reservation.setTravelers(travelers);
-        reservation.setFacilities(facilities);
-        reservation.setUser(user);
-        reservation.setTravel(travel);
-        reservation.setReservationStatus(ReservationStatus.RESERVATION_PASSED);
+        reservationDto.setRoomsDto(roomDtos);
+        reservationDto.setTravelerDtos(travelerDtos);
+        reservationDto.setFacilitiesDto(facilityDtos);
+        reservationDto.setUser(user);
+        reservationDto.setTravelDto(travelDto);
+        reservationDto.setReservationStatus(ReservationStatus.RESERVATION_PASSED);
 
-        return reservationRepository.save(reservation);
+        return modelMapper.map(reservationRepository.save(modelMapper.map(reservationDto, Reservation.class)), ReservationDto.class);
+
 
     }
 
     @Override
-    public Reservation cancelReservation(long id) {
+    public ReservationDto cancelReservation(long id) {
 
         Reservation reservation = reservationRepository.getReferenceById(id);
 
-        long daysUntilDeparture = ChronoUnit.DAYS.between(reservation.getTravel().getDeparture(), LocalDateTime.now());
+        reservation.setReservationStatus(ReservationStatus.RESERVATION_CANCELED);
+        reservationRepository.save(reservation);
 
-
-        if(daysUntilDeparture > 7) {
-            reservation.setReservationStatus(ReservationStatus.RESERVATION_CANCELED);
-            reservationRepository.save(reservation);
-            return reservation;
-        } else {
-            throw new RuntimeException("You can't cancel a reservation until 7 days before departure");
-        }
+        return modelMapper.map(reservationRepository.getReferenceById(id), ReservationDto.class);
     }
 
     @Override
-    public Reservation getReservationById(long id) {
-        return reservationRepository.getReferenceById(id);
+    public ReservationDto getReservationById(long id) {
+
+        return modelMapper.map(reservationRepository.getReferenceById(id), ReservationDto.class);
+
     }
 
 

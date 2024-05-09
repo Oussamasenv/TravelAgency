@@ -1,13 +1,14 @@
 package com.agenceVoyage.backend.dto;
 
-import com.agenceVoyage.backend.model.FlightAvailibility;
-import com.agenceVoyage.backend.model.FlightType;
+import com.agenceVoyage.backend.model.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.ZonedDateTime;
+import java.util.Collection;
 
 
 @Getter
@@ -50,5 +51,10 @@ public class TravelDto {
 
     @NotNull
     private int placesLeft;
+
+    @NotNull
+    private AirplaneCompanyDto airplaneCompanyDto;
+
+    private Collection<ProgramDto> programsDto;
 
 }

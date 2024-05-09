@@ -1,48 +1,73 @@
 package com.agenceVoyage.backend.service.implementations;
 
+import com.agenceVoyage.backend.dto.HotelDto;
+import com.agenceVoyage.backend.dto.RoomDto;
 import com.agenceVoyage.backend.model.Hotel;
-import com.agenceVoyage.backend.model.Room;
 import com.agenceVoyage.backend.model.RoomAvailability;
 import com.agenceVoyage.backend.repository.HotelRepository;
 import com.agenceVoyage.backend.service.interfaces.HotelService;
 import com.agenceVoyage.backend.service.interfaces.RoomService;
 import com.agenceVoyage.backend.wrapper.HotelData;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Service
 public class HotelServiceImp implements HotelService {
+
 
     @Autowired
     private HotelRepository hotelRepository;
 
     private final RoomService roomService;
+    @Autowired
+    private ModelMapper modelMapper;
 
     public HotelServiceImp(RoomServiceImp roomServiceImp) {
         this.roomService = roomServiceImp;
     }
 
     @Override
-    public Hotel createHotel(Hotel hotel) {
-        return hotelRepository.save(hotel);
+    public HotelDto createHotel(HotelDto hotelDto) {
+
+//        return hotelMapper.toHotelDto(hotelRepository.save(hotelMapper.toHotel(hotelDto)));
+        return modelMapper.map(hotelRepository.save(modelMapper.map(hotelDto, Hotel.class)), HotelDto.class);
     }
 
     @Override
-    public HotelData createHotelWithRooms(HotelData hotelData) {
+    public HotelDto createHotelWithRooms(HotelData hotelData) {
 
-        Hotel hotel = hotelData.getHotel();
-        ConcurrentLinkedDeque<Room> rooms = hotelData.getRooms();
-        hotel.setRooms(rooms);
-        hotelRepository.save(hotel);
+        HotelDto hotelDto = hotelData.getHotelDto();
+        ConcurrentLinkedQueue<RoomDto> roomDtos = hotelData.getRoomDtos();
 
-        for (Room room : rooms) {
-            room.setAvailability(RoomAvailability.UNAVAILABLE);
-            room.setHotel(hotel);
-            roomService.createRoom(room);
+        for (RoomDto roomDto : roomDtos) {
+            System.out.println(roomDto.getRoomNumber());
+            System.out.println(roomDto.getPricePerNight());
+            roomDto.setAvailability(RoomAvailability.UNAVAILABLE);
         }
 
-        return hotelData;
+
+
+        hotelDto.setRooms(roomDtos);
+
+        Hotel savedHotel = hotelRepository.save(modelMapper.map(hotelDto, Hotel.class));
+        HotelDto savedHotelDto = modelMapper.map(savedHotel, HotelDto.class);
+
+        System.out.println(hotelDto.getLocation());
+
+
+//        hotelRepository.save(hotelMapper.toHotel(hotelDto));
+
+        for(RoomDto roomDto : roomDtos) {
+            roomDto.setHotelDto(savedHotelDto);
+        }
+
+//        roomService.saveAll(roomDtos);
+
+        roomService.saveAll(roomDtos);
+
+
+        return savedHotelDto;
     }
 }

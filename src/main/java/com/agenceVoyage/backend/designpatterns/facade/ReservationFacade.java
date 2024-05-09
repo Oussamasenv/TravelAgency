@@ -1,5 +1,6 @@
 package com.agenceVoyage.backend.designpatterns.facade;
 
+import com.agenceVoyage.backend.dto.*;
 import com.agenceVoyage.backend.model.*;
 import com.agenceVoyage.backend.service.implementations.*;
 import com.agenceVoyage.backend.service.interfaces.*;
@@ -8,9 +9,7 @@ import org.springframework.stereotype.Component;
 
 
 import java.util.Collection;
-import java.util.concurrent.ConcurrentLinkedDeque;
-
-
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 
 @Component
@@ -30,8 +29,6 @@ public class ReservationFacade {
     private final TravelService travelService;
 
 
-
-
     //preferring constructor injection over field injection for best practices usage
     public ReservationFacade(
             RoomServiceImp roomServiceImp,
@@ -39,9 +36,7 @@ public class ReservationFacade {
             TravelerServiceImp travelerServiceImp,
             FacilityServiceImp facilityServiceImp,
             UserServiceImp userDetailsServiceImp,
-            TravelServiceImp travelServiceImp
-
-    ) {
+            TravelServiceImp travelServiceImp) {
         this.roomService = roomServiceImp;
         this.reservationService = reservationServiceImp;
         this.travelerService = travelerServiceImp;
@@ -51,58 +46,58 @@ public class ReservationFacade {
     }
 
 
-    public Reservation createReservation(ReservationData reservationData) {
+    public ReservationDto createReservation(ReservationData reservationData) {
 
 
-        Travel travel = reservationData.getTravel();
-        ConcurrentLinkedDeque<Room> rooms = reservationData.getRooms();
-        ConcurrentLinkedDeque<Traveler> travelers = reservationData.getTravelers();
-        ConcurrentLinkedDeque<Facility> facilities = reservationData.getFacilities();
+        TravelDto travelDto = reservationData.getTravelDto();
+        ConcurrentLinkedQueue<RoomDto> roomDtos = reservationData.getRoomDtos();
+        ConcurrentLinkedQueue<TravelerDto> travelerDtos = reservationData.getTravelerDtos();
+        ConcurrentLinkedQueue<FacilityDto> facilityDtos = reservationData.getFacilityDtos();
         User user = userService.getUser(reservationData.getUserId());
 
 
 
         // 1.Flight necessary logic for reservation
-        travelService.setTravelToReserve(travel, travelers.size());
+        travelService.setTravelToReserve(travelDto, travelerDtos.size());
 
         // 2. Room necessary logic for reservation
-        double roomsPricing = roomService.setRoomsToReserve(rooms, travel.getDuration());
+        double roomsPricing = roomService.setRoomsToReserve(roomDtos, travelDto.getDuration());
 
         // 3. Traveler necessary logic for reservation
         // save travelers in db;
-        travelerService.setTravelersToReservation(travelers);
+        travelerService.setTravelersToReservation(travelerDtos);
 
         // 4. Facility necessary logic for reservation
-        facilityService.setFacilitiesToReserve(facilities, travel);
+        facilityService.setFacilitiesToReserve(facilityDtos, travelDto);
 
         // 5. Reservation necessary logic for reservation
-        Reservation reservation = reservationService.setReservationToReserve(travel, roomsPricing, facilities, travelers, rooms, user);
+        ReservationDto reservationDto = reservationService.setReservationToReserve(travelDto, roomsPricing, facilityDtos, travelerDtos, roomDtos, user);
 
         // 6. User necessary logic for reservation
-        userService.setUserToReservation(user, reservation);
+        userService.setUserToReservation(user, reservationDto);
 
-        return reservation;
+        return reservationDto;
 
         }
 
-        public Reservation CancelReservation(long id) {
+        public ReservationDto CancelReservation(long id) {
 
-            Reservation reservation = reservationService.getReservationById(id);
+            ReservationDto reservationDto = reservationService.getReservationById(id);
 
-            Travel travel = reservation.getTravel();
-            Collection<Room> roomsVar = reservation.getRooms();
-            ConcurrentLinkedDeque<Room> rooms = new ConcurrentLinkedDeque<Room>(roomsVar);
+            TravelDto travelDto = reservationDto.getTravelDto();
+            Collection<RoomDto> roomDtosVar = reservationDto.getRoomsDto();
+            ConcurrentLinkedQueue<RoomDto> roomDtos = new ConcurrentLinkedQueue<RoomDto>(roomDtosVar);
 
             // 1. travel necessary logic for cancel reservation
-            travelService.setTravelToCancelReservation(travel, reservation.getTravelers().size());
+            travelService.setTravelToCancelReservation(travelDto, reservationDto.getTravelerDtos().size());
 
             // 2. room necessary logic for cancel reservation
-            roomService.setRoomsToCancelReservation(rooms);
+            roomService.setRoomsToCancelReservation(roomDtos);
 
             // 3. room necessary logic for cancel reservation
             reservationService.cancelReservation(id);
 
-            return reservation;
+            return reservationDto;
 
         }
 

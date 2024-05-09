@@ -19,7 +19,7 @@ public class FacilityDto {
     private String name;
 
     @NotNull
-    @DecimalMin(value = "0.0" )
+    @DecimalMin(value = "0.0", message = "basePrice must be positive")
     private double basePricePerDay;
 
     @Enumerated(EnumType.STRING)

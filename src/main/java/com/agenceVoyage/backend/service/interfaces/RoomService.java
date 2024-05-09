@@ -1,16 +1,19 @@
 package com.agenceVoyage.backend.service.interfaces;
 
+import com.agenceVoyage.backend.dto.RoomDto;
 import com.agenceVoyage.backend.model.Room;
 
 import java.util.List;
-import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public interface RoomService {
-    public Room createRoom(Room room);
+    public RoomDto saveRoom(RoomDto roomDto);
 
-    public double setRoomsToReserve(ConcurrentLinkedDeque<Room> rooms, int duration);
+    public double setRoomsToReserve(ConcurrentLinkedQueue<RoomDto> roomDtos, int duration);
 
-    public void setRoomsToCancelReservation(ConcurrentLinkedDeque<Room> rooms);
+    public void setRoomsToCancelReservation(ConcurrentLinkedQueue<RoomDto> roomDtos);
 
-    public List<Room> findAllByIds(List<Long> ids);
+    public ConcurrentLinkedQueue<Room> findAllByIds(List<Long> ids);
+
+    public ConcurrentLinkedQueue<RoomDto> saveAll(ConcurrentLinkedQueue<RoomDto> roomDtos);
 }

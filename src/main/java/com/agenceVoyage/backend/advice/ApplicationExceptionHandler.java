@@ -3,6 +3,7 @@ package com.agenceVoyage.backend.advice;
 
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.ValidationException;
+import org.hibernate.TransientPropertyValueException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,6 +23,8 @@ public class ApplicationExceptionHandler {
     @ExceptionHandler(ConstraintViolationException.class)
     public Map<String, String> handleInvalidArgument(ConstraintViolationException exception) {
 
+        exception.printStackTrace();
+
         Map<String, String> errorMap = new HashMap<String, String>();
 
         exception.getConstraintViolations().forEach( error -> {
@@ -36,6 +39,7 @@ public class ApplicationExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleMethodArgumentNotValid(MethodArgumentNotValidException exception) {
 
+        exception.printStackTrace();
         Map<String, String> errorMap = new HashMap<String, String>();
 
         exception.getBindingResult().getFieldErrors().forEach( err -> {
@@ -47,6 +51,8 @@ public class ApplicationExceptionHandler {
 
         return errorMap;
     }
+
+
 }
 
 

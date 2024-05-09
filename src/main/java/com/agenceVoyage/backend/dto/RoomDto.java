@@ -28,5 +28,6 @@ public class RoomDto {
     @NotNull
     @DecimalMin(value = "0.0")
     private double pricePerNight;
-    private Hotel hotel;
+
+    private HotelDto hotelDto;
 }

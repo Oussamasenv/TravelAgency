@@ -1,13 +1,10 @@
 package com.agenceVoyage.backend.dto;
 
-import com.agenceVoyage.backend.model.Travel;
-import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.concurrent.ConcurrentLinkedDeque;
-
+import java.util.Collection;
 
 @Getter @Setter
 public class AirplaneCompanyDto {
@@ -19,6 +16,6 @@ public class AirplaneCompanyDto {
     private String name;
 
 
-    private ConcurrentLinkedDeque<Travel> travels;
+    private Collection<TravelDto> travelsDto;
 
 }

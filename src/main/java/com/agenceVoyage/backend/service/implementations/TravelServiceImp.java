@@ -1,27 +1,29 @@
 package com.agenceVoyage.backend.service.implementations;
 
+import com.agenceVoyage.backend.dto.TravelDto;
 import com.agenceVoyage.backend.model.*;
 import com.agenceVoyage.backend.repository.TravelRepository;
 import com.agenceVoyage.backend.service.interfaces.AirplaneCompanyService;
 import com.agenceVoyage.backend.service.interfaces.TravelService;
 import com.agenceVoyage.backend.wrapper.TravelData;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
-import java.util.Collection;
-import java.util.concurrent.ConcurrentLinkedDeque;
+
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 
 @Service
 public class TravelServiceImp implements TravelService {
 
-
     @Autowired
     private TravelRepository travelRepository;
 
     private final AirplaneCompanyService airplaneCompanyService;
+    @Autowired
+    private ModelMapper modelMapper;
 
     public TravelServiceImp(AirplaneCompanyServiceImp airplaneCompanyServiceImp) {
         this.airplaneCompanyService = airplaneCompanyServiceImp;
@@ -29,36 +31,41 @@ public class TravelServiceImp implements TravelService {
     }
 
     @Override
-    public Travel saveTravel(Travel travel) {;
-        return travelRepository.save(travel);
+    public TravelDto saveTravel(TravelDto travelDto) {
+
+        travelRepository.save(modelMapper.map(travelDto, Travel.class));
+        return travelDto;
     }
 
     @Override
-    public Travel setTravelToReserve(Travel travel, int placesToReserve) {
+    public TravelDto setTravelToReserve(TravelDto travelDto, int placesToReserve) {
 
 
-                int newPlacesLeft = travel.getPlacesLeft() - placesToReserve;
-                travel.setPlacesLeft(newPlacesLeft);
+                int newPlacesLeft = travelDto.getPlacesLeft() - placesToReserve;
+                travelDto.setPlacesLeft(newPlacesLeft);
 
-                if(placesToReserve == travel.getPlacesLeft()) {
-                    travel.setAvailability(FlightAvailibility.RESERVED);
+                if(placesToReserve == travelDto.getPlacesLeft()) {
+                    travelDto.setAvailability(FlightAvailibility.RESERVED);
                 }
 
-                return travelRepository.save(travel);
+                travelRepository.save(modelMapper.map(travelDto, Travel.class));
+                return travelDto;
 
     }
 
     @Override
-    public Travel setTravelToCancelReservation(Travel travel, int placesToCancel) {
-        travel.setAvailability(FlightAvailibility.AVAILABLE);
-        travel.setPlacesLeft(travel.getPlacesLeft() + placesToCancel);
-        return travelRepository.save(travel);
+    public TravelDto setTravelToCancelReservation(TravelDto travelDto, int placesToCancel) {
+        travelDto.setAvailability(FlightAvailibility.AVAILABLE);
+        travelDto.setPlacesLeft(travelDto.getPlacesLeft() + placesToCancel);
+        travelRepository.save(modelMapper.map(travelDto, Travel.class));
+        return travelDto;
     }
 
 
     @Override
-    public Travel getTravel(long id){
-        return travelRepository.getReferenceById(id);
+    public TravelDto getTravel(long id){
+
+        return modelMapper.map(travelRepository.getReferenceById(id), TravelDto.class);
     }
 
     @Override
@@ -67,7 +74,7 @@ public class TravelServiceImp implements TravelService {
         Travel travel = travelData.getTravel();
 //        AirplaneCompany airplaneCompany = travelData.getAirplaneCompany();
 
-        ConcurrentLinkedDeque<Program> programs = travelData.getPrograms();
+        ConcurrentLinkedQueue<Program> programs = travelData.getPrograms();
 
         int duration = 0;
 
@@ -84,10 +91,6 @@ public class TravelServiceImp implements TravelService {
         travel.setPrograms(travelData.getPrograms());
         travel.setAirplaneCompany(travelData.getAirplaneCompany());
         travelRepository.save(travel);
-
-
-//        airplaneCompany.setTravels();
-//        airplaneCompanyService.saveAirplane(airplane);
 
         return travelData;
 

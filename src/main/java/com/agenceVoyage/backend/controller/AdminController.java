@@ -1,7 +1,8 @@
 package com.agenceVoyage.backend.controller;
 
+import com.agenceVoyage.backend.dto.AirplaneCompanyDto;
 import com.agenceVoyage.backend.dto.FacilityDto;
-import com.agenceVoyage.backend.model.*;
+import com.agenceVoyage.backend.dto.ProgramDto;
 import com.agenceVoyage.backend.service.implementations.*;
 import com.agenceVoyage.backend.service.interfaces.*;
 import com.agenceVoyage.backend.wrapper.HotelData;
@@ -11,12 +12,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -49,9 +50,30 @@ public class AdminController {
 
     @PostMapping("/createHotel")
     @Transactional
-    public ResponseEntity<HotelData> createHotel(@Valid @RequestBody HotelData hotelData) {
+    public ResponseEntity<?> createHotel(
+            @Valid @RequestBody HotelData hotelData,
+            BindingResult bindingResult) {
+
+        try {
+
+            if (bindingResult.hasFieldErrors()) {
+
+                List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+                Map<String, String> errorMap = new HashMap<String, String>();
+
+                for (FieldError fieldError : fieldErrors) {
+                    errorMap.put(fieldError.getField(), fieldError.getDefaultMessage());
+                }
+
+                return ResponseEntity.badRequest().body(errorMap);
+
+            }
 
             return ResponseEntity.ok(hotelService.createHotelWithRooms(hotelData));
+        } catch (Error e ){
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("internal error");
+        }
 
 
     }
@@ -60,10 +82,24 @@ public class AdminController {
     @PostMapping("/createFacility")
     @Transactional
     public ResponseEntity<?> createService(
-            @Valid @RequestBody FacilityDto facilityDto
+            @Valid @RequestBody FacilityDto facilityDto,
+            BindingResult bindingResult
             ) {
 
-            return ResponseEntity.ok(facilityService.createService(facilityDto));
+        if(bindingResult.hasFieldErrors()){
+
+            List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+            Map<String, String> errorMap = new HashMap<String, String>();
+
+            for(FieldError fieldError : fieldErrors){
+                errorMap.put(fieldError.getField(), fieldError.getDefaultMessage());
+            }
+
+            return ResponseEntity.badRequest().body(errorMap);
+
+        }
+
+        return ResponseEntity.ok(facilityService.createService(facilityDto));
 
     }
 
@@ -78,18 +114,20 @@ public class AdminController {
 
     @PostMapping("/createProgram")
     @Transactional
-    public ResponseEntity<Program> saveProgram(@Valid @RequestBody Program program) {
+    public ResponseEntity<?> saveProgram(@Valid @RequestBody ProgramDto programDto) {
 
-        return ResponseEntity.ok(programService.saveProgram(program));
+        return ResponseEntity.ok(programService.saveProgram(programDto));
 
     }
 
 
     @PostMapping("/createAirplaneCompany")
     @Transactional
-    public ResponseEntity<AirplaneCompany> saveAirplaneCompany(@Valid @RequestBody AirplaneCompany airplaneCompany) {
+    public ResponseEntity<?> saveAirplaneCompany(
+            @Valid @RequestBody AirplaneCompanyDto airplaneCompanyDto,
+            BindingResult bindingResult) {
 
-        return ResponseEntity.ok(airplaneCompanyService.saveAirplane(airplaneCompany));
+        return ResponseEntity.ok(airplaneCompanyService.saveAirplane(airplaneCompanyDto));
     }
 
 }

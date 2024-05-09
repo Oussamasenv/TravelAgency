@@ -1,17 +1,18 @@
 package com.agenceVoyage.backend.service.interfaces;
 
+import com.agenceVoyage.backend.dto.TravelDto;
 import com.agenceVoyage.backend.model.Travel;
 import com.agenceVoyage.backend.wrapper.TravelData;
 
 public interface TravelService {
 
-    public Travel saveTravel(Travel travel);
+    public TravelDto saveTravel(TravelDto travelDto);
 
-    public Travel setTravelToReserve(Travel travel, int placesToReserve);
+    public TravelDto setTravelToReserve(TravelDto travelDto, int placesToReserve);
 
-    public Travel setTravelToCancelReservation(Travel travel, int placesToCancel);
+    public TravelDto setTravelToCancelReservation(TravelDto travel, int placesToCancel);
 
-    public Travel getTravel(long id);;
+    public TravelDto getTravel(long id);;
 
     public TravelData createTravel(TravelData travelData);
 }

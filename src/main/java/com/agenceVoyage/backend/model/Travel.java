@@ -1,10 +1,7 @@
 package com.agenceVoyage.backend.model;
 
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.concurrent.ConcurrentLinkedDeque;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -54,11 +51,6 @@ public class Travel {
     private int groupSize;
 
     private int placesLeft;
-
-
-
-    @OneToMany(mappedBy = "travel")
-    private Collection<Reservation> reservations;
 
     @ManyToOne
     @JsonIgnore

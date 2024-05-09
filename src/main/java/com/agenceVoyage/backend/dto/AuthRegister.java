@@ -10,7 +10,7 @@ import org.springframework.format.annotation.NumberFormat;
 
 @Getter
 @Setter
-public class AuthRegisterDto {
+public class AuthRegister {
 
     private long id;
 

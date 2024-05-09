@@ -1,8 +1,8 @@
 package com.agenceVoyage.backend.service.interfaces;
 
-import com.agenceVoyage.backend.model.AirplaneCompany;
+import com.agenceVoyage.backend.dto.AirplaneCompanyDto;
 
 public interface AirplaneCompanyService {
 
-    public AirplaneCompany saveAirplane(AirplaneCompany airplaneCompany);
+    public AirplaneCompanyDto saveAirplane(AirplaneCompanyDto airplaneCompanyDto);
 }

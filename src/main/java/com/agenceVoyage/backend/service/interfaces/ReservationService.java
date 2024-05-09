@@ -1,21 +1,23 @@
 package com.agenceVoyage.backend.service.interfaces;
 
+import com.agenceVoyage.backend.dto.*;
 import com.agenceVoyage.backend.model.*;
 
 import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public interface ReservationService {
-    public Reservation save(Reservation reservation);
+    public ReservationDto save(ReservationDto reservationDto);
 
-    public Reservation setReservationToReserve(
-            Travel travel,
+    public ReservationDto setReservationToReserve(
+            TravelDto travelDto,
             double roomsPricing,
-            ConcurrentLinkedDeque<Facility> facilities,
-            ConcurrentLinkedDeque<Traveler> travelers,
-            ConcurrentLinkedDeque<Room> rooms,
+            ConcurrentLinkedQueue<FacilityDto> facilityDtos,
+            ConcurrentLinkedQueue<TravelerDto> travelerDtos,
+            ConcurrentLinkedQueue<RoomDto> roomDtos,
             User user);
 
-    public Reservation cancelReservation(long id);
+    public ReservationDto cancelReservation(long id);
 
-    public Reservation getReservationById(long id);
+    public ReservationDto getReservationById(long id);
 }

@@ -1,9 +1,10 @@
 package com.agenceVoyage.backend.service.interfaces;
 
+import com.agenceVoyage.backend.dto.ProgramDto;
 import com.agenceVoyage.backend.model.Program;
 
 public interface ProgramService {
 
-    public Program saveProgram(Program program);
+    public ProgramDto saveProgram(ProgramDto programDto);
 
 }

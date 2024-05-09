@@ -10,6 +10,7 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.util.Collection;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 @Getter
 @Setter
@@ -40,7 +41,6 @@ public class Hotel {
 
     @OneToMany(mappedBy = "hotel")
     @JsonIgnore
-    @NotNull
     private Collection<Room> rooms;
 
 }
