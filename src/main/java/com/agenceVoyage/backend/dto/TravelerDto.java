@@ -20,8 +20,14 @@ public class TravelerDto {
     @Size(min = 2, max = 50)
     private String lastName;
 
+
+
     @NotNull
     private int age;
+
+
+    @NotBlank
+    private String identity;
 
 
 

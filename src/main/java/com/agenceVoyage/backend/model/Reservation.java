@@ -41,22 +41,18 @@ public class Reservation {
     private User user;
 
     @ManyToMany(cascade = CascadeType.PERSIST)
-    @JsonIgnore
     @NotNull
     private Collection<Traveler> travelers;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JsonIgnore
     @NotNull
     private Travel travel;
 
     @OneToMany(cascade = CascadeType.PERSIST)
-    @JsonIgnore
     @NotNull
     private Collection<Room> rooms;
 
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    @JsonIgnore
     private Collection<Facility> facilities;
 
 }

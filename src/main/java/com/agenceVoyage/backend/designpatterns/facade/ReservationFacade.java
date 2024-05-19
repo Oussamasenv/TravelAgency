@@ -84,12 +84,12 @@ public class ReservationFacade {
 
             ReservationDto reservationDto = reservationService.getReservationById(id);
 
-            TravelDto travelDto = reservationDto.getTravelDto();
-            Collection<RoomDto> roomDtosVar = reservationDto.getRoomsDto();
+            TravelDto travelDto = reservationDto.getTravel();
+            Collection<RoomDto> roomDtosVar = reservationDto.getRooms();
             ConcurrentLinkedQueue<RoomDto> roomDtos = new ConcurrentLinkedQueue<RoomDto>(roomDtosVar);
 
             // 1. travel necessary logic for cancel reservation
-            travelService.setTravelToCancelReservation(travelDto, reservationDto.getTravelerDtos().size());
+            travelService.setTravelToCancelReservation(travelDto, reservationDto.getTravelers().size());
 
             // 2. room necessary logic for cancel reservation
             roomService.setRoomsToCancelReservation(roomDtos);

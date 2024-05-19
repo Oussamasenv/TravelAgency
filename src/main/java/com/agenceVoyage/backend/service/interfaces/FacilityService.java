@@ -14,6 +14,12 @@ public interface FacilityService {
 
     public FacilityDto createService(FacilityDto facilityDto);
 
+    public List<FacilityDto> getAllFacilities();
+
     public double setFacilitiesToReserve(ConcurrentLinkedQueue<FacilityDto> facilityDtos, TravelDto travelDto);
+
+    public void deleteFacility(long id);
+
+    public FacilityDto updateFacility(long id, FacilityDto facilityDto);
 
 }

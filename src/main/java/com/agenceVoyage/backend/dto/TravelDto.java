@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 
 import java.time.ZonedDateTime;
@@ -42,6 +43,9 @@ public class TravelDto {
     @DecimalMin(value = "0.0")
     private double initialPrice;
 
+    @DecimalMin(value = "0.0")
+    private double discountedPrice;
+
     @Enumerated(EnumType.STRING)
     private FlightAvailibility availability;
 
@@ -55,6 +59,7 @@ public class TravelDto {
     @NotNull
     private AirplaneCompanyDto airplaneCompanyDto;
 
+    @NonNull
     private Collection<ProgramDto> programDtos;
 
 }

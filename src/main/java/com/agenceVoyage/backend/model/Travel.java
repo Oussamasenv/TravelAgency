@@ -2,6 +2,8 @@ package com.agenceVoyage.backend.model;
 
 import java.time.ZonedDateTime;
 import java.util.Collection;
+
+import com.agenceVoyage.backend.dto.AirplaneCompanyDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -43,6 +45,9 @@ public class Travel {
     @DecimalMin(value = "0.0")
     private double initialPrice;
 
+    @DecimalMin(value = "0.0")
+    private double discountedPrice;
+
     @Enumerated(EnumType.STRING)
     private FlightAvailibility availability;
 
@@ -57,12 +62,10 @@ public class Travel {
             name = "airplane_company_id",
             referencedColumnName = "id"
     )
-    @JsonIgnore
     @NotNull
     private AirplaneCompany airplaneCompany;
 
     @OneToMany
-    @JsonIgnore
     private Collection<Program> programs;
 
 

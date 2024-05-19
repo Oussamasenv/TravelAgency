@@ -64,15 +64,19 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse authenticate(User request) {
+
+        System.out.println(request.getEmail());
+        System.out.println(request.getPassword());
+
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.getUsername(),
+                        request.getEmail(),
                         request.getPassword()
                 )
 
         );
 
-        User user = repository.findByUsername(request.getUsername()).orElseThrow();
+        User user = repository.findByEmail(request.getEmail()).orElseThrow();
         String jwt = jwtService.generateToken(user);
 
         revokeAllTokenByUser(user);

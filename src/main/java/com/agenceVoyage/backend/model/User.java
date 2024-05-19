@@ -55,7 +55,6 @@ public class User implements UserDetails {
     private Role role;
 
     @OneToOne(mappedBy = "user")
-    @JsonIgnore
     private Reservation reservation;
 
 

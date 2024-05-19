@@ -9,12 +9,15 @@ import com.agenceVoyage.backend.service.interfaces.AirplaneCompanyService;
 import com.agenceVoyage.backend.service.interfaces.TravelService;
 import com.agenceVoyage.backend.wrapper.TravelData;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
 import java.time.ZonedDateTime;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 
@@ -100,6 +103,41 @@ public class TravelServiceImp implements TravelService {
         return travelData;
 
 
+    }
+
+    @Override
+    public void deleteTravel(long id) {
+        travelRepository.deleteById(id);
+    }
+
+    @Override
+    public TravelDto updateTravel(long id, TravelDto travelDto) {
+
+        Optional<Travel> optionalTravel = travelRepository.findById(id);
+
+        if (optionalTravel.isPresent()) {
+            Travel travel = optionalTravel.get();
+            travel.setAirplaneCompany(modelMapper.map(travelDto.getAirplaneCompanyDto(), AirplaneCompany.class));
+            travel.setDeparture(travelDto.getDeparture());
+            travel.setDuration(travelDto.getDuration());
+            travel.setReturnDate(travelDto.getReturnDate());
+            travel.setGroupSize(travelDto.getGroupSize());
+            travel.setPlacesLeft(travelDto.getPlacesLeft());
+            travel.setAvailability(travelDto.getAvailability());
+            travel.setPrograms(modelMapper.map(travelDto.getProgramDtos(), new TypeToken<ConcurrentLinkedQueue<Program>>(){} .getType() ));
+            travelRepository.save(travel);
+
+            return travelDto;
+
+        } else {
+            throw new RuntimeException("Travel not found");
+        }
+
+    }
+
+    @Override
+    public List<TravelDto> getTravels() {
+        return modelMapper.map(travelRepository.findAll(), new TypeToken<List<TravelDto>>() {} .getType());
     }
 
 }

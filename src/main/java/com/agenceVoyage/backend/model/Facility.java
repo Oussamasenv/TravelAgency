@@ -31,17 +31,5 @@ public class Facility {
     @Enumerated(EnumType.STRING)
     private FacilityPricingType facilityPricingType;
 
-//
-//    @NotNull
-//    private FacilityPricingType facilityPricingType;
 
-
-//    @ManyToMany(mappedBy = "services")
-//    private Collection<Reservation> reservations;
-//
-//    @ManyToMany
-//    private Collection<AirplaneCompany> airplaneCompanies;
-//
-//    @ManyToMany
-//    private Collection<Hotel> hotels;
 }

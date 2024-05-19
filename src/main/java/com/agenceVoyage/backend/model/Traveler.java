@@ -31,7 +31,6 @@ public class Traveler {
     private int age;
 
     @NotBlank
-    @Column(unique = true)
     private String identity;
 
 

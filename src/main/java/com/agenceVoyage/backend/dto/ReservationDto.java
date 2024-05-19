@@ -25,10 +25,10 @@ public class ReservationDto {
     private ReservationStatus reservationStatus;
     private User user;
     @NotNull
-    private Collection<TravelerDto> travelerDtos;
+    private Collection<TravelerDto> travelers;
     @NotNull
-    private TravelDto travelDto;
+    private TravelDto travel;
     @NotNull
-    private Collection<RoomDto> roomsDto;
-    private Collection<FacilityDto> facilitiesDto;
+    private Collection<RoomDto> rooms;
+    private Collection<FacilityDto> facilities;
 }

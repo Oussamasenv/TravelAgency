@@ -40,7 +40,6 @@ public class Hotel {
     private int roomsNumber;
 
     @OneToMany(mappedBy = "hotel")
-    @JsonIgnore
     private Collection<Room> rooms;
 
 }

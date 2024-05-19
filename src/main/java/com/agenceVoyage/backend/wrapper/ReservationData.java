@@ -5,6 +5,7 @@ import com.agenceVoyage.backend.dto.RoomDto;
 import com.agenceVoyage.backend.dto.TravelDto;
 import com.agenceVoyage.backend.dto.TravelerDto;
 import com.agenceVoyage.backend.model.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.concurrent.ConcurrentLinkedDeque;
@@ -22,10 +23,17 @@ public class ReservationData {
 //    private ConcurrentLinkedDeque<Traveler> travelers;
 //    private long userId;
 
+    @NotNull
     private TravelDto travelDto;
+    @NotNull
     private ConcurrentLinkedQueue<RoomDto> roomDtos;
+
     private ConcurrentLinkedQueue<FacilityDto> facilityDtos;
+
+    @NotNull
     private ConcurrentLinkedQueue<TravelerDto> travelerDtos;
+
+    @NotNull
     private long userId;
 
 }

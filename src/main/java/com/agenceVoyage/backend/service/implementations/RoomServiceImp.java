@@ -1,6 +1,7 @@
 package com.agenceVoyage.backend.service.implementations;
 
 import com.agenceVoyage.backend.dto.RoomDto;
+import com.agenceVoyage.backend.model.Hotel;
 import com.agenceVoyage.backend.model.Room;
 import com.agenceVoyage.backend.model.RoomAvailability;
 import com.agenceVoyage.backend.repository.RoomRepository;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -73,6 +75,36 @@ public class RoomServiceImp implements RoomService {
 
         return roomDtos;
 
+
+    }
+
+    @Override
+    public void deleteRoom(long id) {
+        roomRepository.deleteById(id);
+    }
+
+    @Override
+    public Optional<RoomDto> getRoom(long id) {
+        return Optional.empty();
+    }
+
+    @Override
+    public RoomDto updateRoom(long id, RoomDto roomDto) {
+        Optional<Room> optionalRoom = roomRepository.findById(id);
+
+        if(optionalRoom.isPresent()){
+            Room room = optionalRoom.get();
+            room.setAvailability(roomDto.getAvailability());
+            room.setRoomNumber(roomDto.getRoomNumber());
+            room.setPricePerNight(roomDto.getPricePerNight());
+            room.setHotel(modelMapper.map(roomDto.getHotelDto(), Hotel.class));
+
+            roomRepository.save(room);
+
+            return roomDto;
+        } else {
+            throw new RuntimeException("Invalid room");
+        }
 
     }
 }

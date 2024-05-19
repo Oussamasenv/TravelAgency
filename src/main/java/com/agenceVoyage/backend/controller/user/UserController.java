@@ -1,13 +1,11 @@
-package com.agenceVoyage.backend.controller;
+package com.agenceVoyage.backend.controller.user;
 
 import com.agenceVoyage.backend.designpatterns.facade.ReservationFacade;
 import com.agenceVoyage.backend.wrapper.ReservationData;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class UserController {
@@ -25,17 +23,18 @@ public class UserController {
     public ResponseEntity<?> createReservation(@Valid @RequestBody ReservationData reservationData) {
 
             reservationFacade.createReservation(reservationData);
-            return ResponseEntity.ok("successfull reservation");
+            return ResponseEntity.ok("reservation created successfully");
 
 
     }
 
-    @PostMapping("/cancelReservation")
+    @PutMapping("/cancelReservation/{id}")
     @Transactional
-    public ResponseEntity<?> cancelReservation(@Valid @RequestBody long id) {
+    public ResponseEntity<?> cancelReservation(@PathVariable long id) {
 
             reservationFacade.CancelReservation(id);
             return ResponseEntity.ok("reservation canceled");
+
 
     }
 

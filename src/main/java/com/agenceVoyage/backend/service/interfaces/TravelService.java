@@ -4,6 +4,9 @@ import com.agenceVoyage.backend.dto.TravelDto;
 import com.agenceVoyage.backend.model.Travel;
 import com.agenceVoyage.backend.wrapper.TravelData;
 
+import java.util.List;
+import java.util.Optional;
+
 public interface TravelService {
 
     public TravelDto saveTravel(TravelDto travelDto);
@@ -15,4 +18,13 @@ public interface TravelService {
     public TravelDto getTravel(long id);;
 
     public TravelData createTravel(TravelData travelData);
+
+    public void deleteTravel(long id);
+
+    public TravelDto updateTravel(long id, TravelDto travelDto);
+
+    public List<TravelDto> getTravels();
+
+
+
 }

@@ -9,8 +9,12 @@ import com.agenceVoyage.backend.service.interfaces.HotelService;
 import com.agenceVoyage.backend.service.interfaces.RoomService;
 import com.agenceVoyage.backend.wrapper.HotelData;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Service
@@ -69,5 +73,41 @@ public class HotelServiceImp implements HotelService {
 
 
         return savedHotelDto;
+    }
+
+    @Override
+    public void deleteHotel(long id) {
+        hotelRepository.deleteById(id);
+    }
+
+    @Override
+    public HotelDto updateHotel(long id, HotelDto hotelDto) {
+
+        Optional<Hotel> optionHotel = hotelRepository.findById(id);
+
+        if(optionHotel.isPresent()) {
+            Hotel hotel = optionHotel.get();
+            hotel.setName(hotelDto.getName());
+            hotel.setLocation(hotelDto.getLocation());
+            hotel.setRoomsNumber(hotelDto.getRoomsNumber());
+            hotel.setRooms(modelMapper.map(hotelDto.getRooms(), new TypeToken<ConcurrentLinkedQueue<RoomDto>>() {} .getType()));
+            hotel.setLocation(hotelDto.getLocation());
+            hotelRepository.save(hotel);
+
+            return hotelDto;
+
+        } else {
+            throw new RuntimeException("Hotel does not exist");
+        }
+
+
+
+    }
+
+    @Override
+    public List<HotelDto> getHotels() {
+
+        return modelMapper.map(hotelRepository.findAll(), new TypeToken<List<HotelDto>>() {} .getType());
+
     }
 }

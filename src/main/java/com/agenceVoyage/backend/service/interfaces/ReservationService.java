@@ -3,6 +3,7 @@ package com.agenceVoyage.backend.service.interfaces;
 import com.agenceVoyage.backend.dto.*;
 import com.agenceVoyage.backend.model.*;
 
+import java.util.List;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -20,4 +21,7 @@ public interface ReservationService {
     public ReservationDto cancelReservation(long id);
 
     public ReservationDto getReservationById(long id);
+
+    public List<ReservationDto> getAllReservations();
+
 }

@@ -3,15 +3,18 @@ package com.agenceVoyage.backend.service.implementations;
 
 
 import com.agenceVoyage.backend.dto.ReservationDto;
+import com.agenceVoyage.backend.dto.UserDto;
 import com.agenceVoyage.backend.model.Reservation;
 import com.agenceVoyage.backend.model.User;
 import com.agenceVoyage.backend.repository.UserRepository;
 import com.agenceVoyage.backend.service.interfaces.UserService;
 import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -46,4 +49,43 @@ public class UserServiceImp implements UserService {
     public User getUser(long id){
         return userRepository.getReferenceById(id);
     }
+
+    @Override
+    public void deleteUser(long id) {
+        userRepository.deleteById(id);
+    }
+
+    @Override
+    public UserDto updateUser(long id, UserDto userDto) {
+
+        Optional<User> optionalUser = userRepository.findById(id);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            user.setFirstName(userDto.getFirstName());
+            user.setLastName(userDto.getLastName());
+            user.setUsername(userDto.getUsername());
+            user.setPassword(userDto.getPassword());
+            user.setEmail(userDto.getEmail());
+            user.setPhoneNumber(userDto.getPhoneNumber());
+            userRepository.save(user);
+            return userDto;
+
+        } else {
+            throw new RuntimeException("User not found");
+        }
+
+    }
+
+    @Override
+    public List<UserDto> getAllUsers() {
+        return modelMapper.map(userRepository.findAll(), new TypeToken<List<UserDto>>() {} .getType());
+    }
+
+    @Override
+    public UserDto addUser(UserDto userDto) {
+
+        userRepository.save(modelMapper.map(userDto, User.class));
+        return userDto;
+    }
+
 }

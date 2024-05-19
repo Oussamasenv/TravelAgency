@@ -1,4 +1,5 @@
 package com.agenceVoyage.backend.dto;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +10,7 @@ import lombok.Setter;
 public class AuthLogin {
 
     @NotBlank
-    private String username;
+    private String email;
 
     @NotBlank
     private String password;

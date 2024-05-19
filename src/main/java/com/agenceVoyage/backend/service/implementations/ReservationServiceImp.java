@@ -6,10 +6,16 @@ import com.agenceVoyage.backend.repository.ReservationRepository;
 import com.agenceVoyage.backend.service.interfaces.FacilityService;
 import com.agenceVoyage.backend.service.interfaces.ReservationService;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
+import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Service
@@ -61,11 +67,11 @@ public class ReservationServiceImp implements ReservationService {
         reservationDto.setTotalPricing(totalPricing);
         reservationDto.setReservationDate(LocalDateTime.now());
 
-        reservationDto.setRoomsDto(roomDtos);
-        reservationDto.setTravelerDtos(travelerDtos);
-        reservationDto.setFacilitiesDto(facilityDtos);
+        reservationDto.setRooms(roomDtos);
+        reservationDto.setTravelers(travelerDtos);
+        reservationDto.setFacilities(facilityDtos);
         reservationDto.setUser(user);
-        reservationDto.setTravelDto(travelDto);
+        reservationDto.setTravel(travelDto);
         reservationDto.setReservationStatus(ReservationStatus.RESERVATION_PASSED);
 
         return modelMapper.map(reservationRepository.save(modelMapper.map(reservationDto, Reservation.class)), ReservationDto.class);
@@ -78,10 +84,19 @@ public class ReservationServiceImp implements ReservationService {
 
         Reservation reservation = reservationRepository.getReferenceById(id);
 
+
+        long daysUntilDeparture = ChronoUnit.DAYS.between(reservation.getTravel().getDeparture(), ZonedDateTime.now());
+
+        if(daysUntilDeparture < 7){
+            throw new RuntimeException("You can't cancel a reservation before 7 days of departure");
+        }
+
         reservation.setReservationStatus(ReservationStatus.RESERVATION_CANCELED);
+        reservation.setCancellationDate(LocalDateTime.now());
         reservationRepository.save(reservation);
 
         return modelMapper.map(reservationRepository.getReferenceById(id), ReservationDto.class);
+
     }
 
     @Override
@@ -91,5 +106,9 @@ public class ReservationServiceImp implements ReservationService {
 
     }
 
+    public List<ReservationDto> getAllReservations(){
+        return modelMapper.map(reservationRepository.findAll(), new TypeToken<List<ReservationDto>>() {
+        }.getType());
+    }
 
 }
