@@ -32,6 +32,16 @@ public class UserDetailsServiceImp implements UserDetailsService {
 
     }
 
+    public User loadByEmail(String email) throws UsernameNotFoundException {
+        Optional<User> user = repository.findByEmail(email);
+        if (user.isPresent()) {
+            return user.get();
+        } else {
+            System.out.println("no user found");
+            throw new UsernameNotFoundException("no user found");
+        }
+    }
+
     public Optional<User> findUser(String username) {
         return repository.findByUsername(username);
     }

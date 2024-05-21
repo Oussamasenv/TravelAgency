@@ -2,6 +2,7 @@ package com.agenceVoyage.backend.model;
 
 import java.time.ZonedDateTime;
 import java.util.Collection;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import com.agenceVoyage.backend.dto.AirplaneCompanyDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -55,6 +56,7 @@ public class Travel {
     @Min(1)
     private int groupSize;
 
+    @NotNull
     private int placesLeft;
 
     @ManyToOne
@@ -66,7 +68,12 @@ public class Travel {
     private AirplaneCompany airplaneCompany;
 
     @OneToMany
+    @NotNull
     private Collection<Program> programs;
+
+
+    @OneToMany
+    public Collection<Facility> facilities;
 
 
 

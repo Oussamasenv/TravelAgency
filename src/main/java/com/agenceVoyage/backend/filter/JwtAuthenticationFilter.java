@@ -1,6 +1,7 @@
 package com.agenceVoyage.backend.filter;
 
 
+import com.agenceVoyage.backend.model.User;
 import com.agenceVoyage.backend.service.JwtService;
 import com.agenceVoyage.backend.service.UserDetailsServiceImp;
 import jakarta.servlet.FilterChain;
@@ -44,16 +45,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         String token = authHeader.substring(7);
-        String username = jwtService.extractUsername(token);
+        String email = jwtService.extractEmail(token);
 
-        if(username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        if(email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            User user = userDetailsService.loadByEmail(email);
 
 
-            if(jwtService.isValid(token, userDetails)) {
+            if(jwtService.isValid(token, user)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities()
+                        user, null, user.getAuthorities()
                 );
 
                 authToken.setDetails(

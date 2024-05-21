@@ -33,5 +33,4 @@ public class Traveler {
     @NotBlank
     private String identity;
 
-
 }

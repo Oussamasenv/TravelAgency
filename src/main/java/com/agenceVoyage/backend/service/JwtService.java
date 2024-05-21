@@ -6,7 +6,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -25,20 +24,20 @@ public class JwtService {
         this.tokenRepository = tokenRepository;
     }
 
-    public String extractUsername(String token) {
+    public String extractEmail(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
 
-    public boolean isValid(String token, UserDetails user) {
-        String username = extractUsername(token);
+    public boolean isValid(String token, User user) {
+        String email = user.getEmail();
 
         boolean validToken = tokenRepository
                 .findByToken(token)
                 .map(t -> !t.isLoggedOut())
                 .orElse(false);
 
-        return (username.equals(user.getUsername())) && !isTokenExpired(token) && validToken;
+        return (email.equals(extractEmail(token))) && !isTokenExpired(token) && validToken;
     }
 
     private boolean isTokenExpired(String token) {
@@ -67,7 +66,7 @@ public class JwtService {
     public String generateToken(User user) {
         String token = Jwts
                 .builder()
-                .subject(user.getUsername())
+                .subject(user.getEmail())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + 24*60*60*1000 ))
                 .signWith(getSigninKey())
