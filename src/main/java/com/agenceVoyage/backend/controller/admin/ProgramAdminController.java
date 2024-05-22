@@ -7,6 +7,7 @@ import com.agenceVoyage.backend.service.implementations.ProgramServiceImp;
 import com.agenceVoyage.backend.service.interfaces.ProgramService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
@@ -30,10 +31,10 @@ public class ProgramAdminController {
     }
 
 
-    @PostMapping("/createProgram")
+    @PostMapping(value = "/createProgram")
     @Transactional
     public ResponseEntity<?> saveProgram(
-            @Valid @RequestBody ProgramDto programDto,
+            @Valid @ModelAttribute ProgramDto programDto,
             BindingResult bindingResult
             ) {
 

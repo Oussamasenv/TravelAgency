@@ -17,6 +17,7 @@ public class HotelDto {
     private long id;
 
     @Size(min = 8, max = 50)
+    @NotBlank
     private String name;
 
     @NotBlank

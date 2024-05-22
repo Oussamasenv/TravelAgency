@@ -1,5 +1,8 @@
 package com.agenceVoyage.backend.dto;
 
+import com.agenceVoyage.backend.model.Role;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -15,13 +18,16 @@ public class AuthRegister {
     private long id;
 
     @Size(min = 5, max = 20)
+    @NotBlank
     private String firstName;
 
     @Size(min = 5, max = 20)
+    @NotBlank
     private String lastName;
 
 
     @Size(min = 5, max = 20)
+    @NotBlank
     private String username;
 
     @Email
@@ -34,6 +40,9 @@ public class AuthRegister {
 
     @NotBlank
     private String password;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
 
 

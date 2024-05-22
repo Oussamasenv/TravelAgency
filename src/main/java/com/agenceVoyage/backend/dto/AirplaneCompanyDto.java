@@ -1,5 +1,6 @@
 package com.agenceVoyage.backend.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +14,7 @@ public class AirplaneCompanyDto {
 
 
     @Size(min = 2, max = 30)
+    @NotBlank
     private String name;
 
 

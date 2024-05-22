@@ -16,9 +16,11 @@ import java.util.Collection;
 @Setter
 public class TravelDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @NotBlank
+    @Size(min = 3, max = 50)
+    private String name;
 
     @NotNull
     @FutureOrPresent
@@ -56,10 +58,12 @@ public class TravelDto {
     @NotNull
     private int placesLeft;
 
+
+
     @NotNull
-    private AirplaneCompanyDto airplaneCompanyDto;
+    private AirplaneCompanyDto airplaneCompany;
 
     @NonNull
-    private Collection<ProgramDto> programDtos;
+    private Collection<ProgramDto> programs;
 
 }

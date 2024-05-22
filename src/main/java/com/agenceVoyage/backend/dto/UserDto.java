@@ -19,14 +19,17 @@ public class UserDto {
 
     @Column(name = "first_name")
     @Size(min = 5, max = 20)
+    @NotBlank
     private String firstName;
 
     @Column(name = "last_name")
     @Size(min = 5, max = 20)
+    @NotBlank
     private String lastName;
 
     @Column(name = "username", unique = true)
     @Size(min = 5, max = 20)
+    @NotBlank
     private String username;
 
     @Email

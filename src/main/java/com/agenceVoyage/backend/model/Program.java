@@ -18,14 +18,22 @@ public class Program {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Size(min = 2, max = 50)
+    @Size(min = 3, max = 50)
     @Column(unique = true)
+    @NotBlank
     private String name;
 
     @NotBlank
+    @Size(min = 3, max = 50)
     private String description;
+
+    @OneToOne
+    @NotNull
+    private Filedata filedata;
+
 
     @NotNull
     private int duration;
+
 
 }

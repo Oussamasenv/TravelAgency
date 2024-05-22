@@ -10,6 +10,7 @@ import lombok.Setter;
 public class AuthLogin {
 
     @NotBlank
+    @Email
     private String email;
 
     @NotBlank

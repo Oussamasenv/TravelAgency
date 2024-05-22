@@ -24,6 +24,11 @@ public class Travel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @NotBlank
+    @Size(min = 3, max = 50)
+    @Column(unique = true)
+    private String name;
+
     @NotNull
     @FutureOrPresent
     private ZonedDateTime departure;

@@ -95,8 +95,8 @@ public class TravelServiceImp implements TravelService {
         travelDto.setPlacesLeft(travelDto.getGroupSize());
         travelDto.setDuration(duration);
         travelDto.setReturnDate(returnDate);
-        travelDto.setProgramDtos(travelData.getProgramDtos());
-        travelDto.setAirplaneCompanyDto(airplaneCompanyDto);
+        travelDto.setPrograms(travelData.getProgramDtos());
+        travelDto.setAirplaneCompany(airplaneCompanyDto);
         travelRepository.save(modelMapper.map(travelDto, Travel.class));
 
 
@@ -117,14 +117,14 @@ public class TravelServiceImp implements TravelService {
 
         if (optionalTravel.isPresent()) {
             Travel travel = optionalTravel.get();
-            travel.setAirplaneCompany(modelMapper.map(travelDto.getAirplaneCompanyDto(), AirplaneCompany.class));
+            travel.setAirplaneCompany(modelMapper.map(travelDto.getAirplaneCompany(), AirplaneCompany.class));
             travel.setDeparture(travelDto.getDeparture());
             travel.setDuration(travelDto.getDuration());
             travel.setReturnDate(travelDto.getReturnDate());
             travel.setGroupSize(travelDto.getGroupSize());
             travel.setPlacesLeft(travelDto.getPlacesLeft());
             travel.setAvailability(travelDto.getAvailability());
-            travel.setPrograms(modelMapper.map(travelDto.getProgramDtos(), new TypeToken<ConcurrentLinkedQueue<Program>>(){} .getType() ));
+            travel.setPrograms(modelMapper.map(travelDto.getPrograms(), new TypeToken<ConcurrentLinkedQueue<Program>>(){} .getType() ));
             travelRepository.save(travel);
 
             return travelDto;
