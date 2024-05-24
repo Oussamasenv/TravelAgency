@@ -12,7 +12,7 @@ import org.springframework.data.domain.Sort;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class ProgramPage {
+public class PageProperties {
     private int pageNumber = 0;
     private int pageSize = 10;
     private Sort.Direction sortDirection = Sort.Direction.ASC;

@@ -2,8 +2,8 @@ package com.agenceVoyage.backend.controller.admin;
 
 
 import com.agenceVoyage.backend.advice.ApplicationExceptionHandler;
-import com.agenceVoyage.backend.criteriaRepositories.ProgramPage;
-import com.agenceVoyage.backend.criteriaRepositories.ProgramSearchCriteria;
+import com.agenceVoyage.backend.criteriaRepositories.PageProperties;
+import com.agenceVoyage.backend.criteriaRepositories.programCq.ProgramSearchCriteria;
 import com.agenceVoyage.backend.dto.ProgramDto;
 import com.agenceVoyage.backend.model.Program;
 import com.agenceVoyage.backend.service.implementations.ProgramServiceImp;
@@ -12,11 +12,9 @@ import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -97,7 +95,7 @@ public class ProgramAdminController {
             ) {
 
 
-        return new ResponseEntity<>(programService.getPrograms(new ProgramPage(pageNumber, pageSize, sortDirection, sortBy), new ProgramSearchCriteria(name, description)), HttpStatus.OK);
+        return new ResponseEntity<>(programService.getPrograms(new PageProperties(pageNumber, pageSize, sortDirection, sortBy), new ProgramSearchCriteria(name, description)), HttpStatus.OK);
 
     }
 

@@ -1,9 +1,9 @@
 package com.agenceVoyage.backend.service.implementations;
 
 
-import com.agenceVoyage.backend.criteriaRepositories.ProgramPage;
-import com.agenceVoyage.backend.criteriaRepositories.ProgramRepositoryCq;
-import com.agenceVoyage.backend.criteriaRepositories.ProgramSearchCriteria;
+import com.agenceVoyage.backend.criteriaRepositories.PageProperties;
+import com.agenceVoyage.backend.criteriaRepositories.programCq.ProgramRepositoryCq;
+import com.agenceVoyage.backend.criteriaRepositories.programCq.ProgramSearchCriteria;
 import com.agenceVoyage.backend.dto.ProgramDto;
 import com.agenceVoyage.backend.model.Filedata;
 import com.agenceVoyage.backend.model.Program;
@@ -97,10 +97,10 @@ public class ProgramServiceImp implements ProgramService {
 
 
     public Page<Program> getPrograms(
-            ProgramPage programPage,
+            PageProperties pageProperties,
             ProgramSearchCriteria programSearchCriteria) {
 
-        return programRepositoryCq.FindAllWithFilter(programPage, programSearchCriteria);
+        return programRepositoryCq.FindAllWithFilter(pageProperties, programSearchCriteria);
 
 
     }

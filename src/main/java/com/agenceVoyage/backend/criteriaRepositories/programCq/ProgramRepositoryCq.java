@@ -1,6 +1,7 @@
-package com.agenceVoyage.backend.criteriaRepositories;
+package com.agenceVoyage.backend.criteriaRepositories.programCq;
 
 
+import com.agenceVoyage.backend.criteriaRepositories.PageProperties;
 import com.agenceVoyage.backend.model.Program;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -30,7 +31,7 @@ public class ProgramRepositoryCq {
 
 
     public Page<Program> FindAllWithFilter(
-            ProgramPage programPage,
+            PageProperties pageProperties,
             ProgramSearchCriteria programSearchCriteria) {
 
 
@@ -39,12 +40,12 @@ public class ProgramRepositoryCq {
         Root<Program> programRoot = criteriaQuery.from(Program.class);
         Predicate predicate = getPredicate(programSearchCriteria, programRoot);
         criteriaQuery.where(predicate);
-        setOrder(programPage, criteriaQuery, programRoot);
+        setOrder(pageProperties, criteriaQuery, programRoot);
         TypedQuery<Program> typedQuery = em.createQuery(criteriaQuery);
-        typedQuery.setFirstResult(programPage.getPageNumber() * programPage.getPageSize());
-        typedQuery.setMaxResults(programPage.getPageSize());
+        typedQuery.setFirstResult(pageProperties.getPageNumber() * pageProperties.getPageSize());
+        typedQuery.setMaxResults(pageProperties.getPageSize());
 
-        Pageable pageable = getPageable(programPage);
+        Pageable pageable = getPageable(pageProperties);
 
         long programsCount = getProgramsCount(programSearchCriteria);
 
@@ -79,18 +80,18 @@ public class ProgramRepositoryCq {
 
     }
 
-    private void setOrder(ProgramPage programPage, CriteriaQuery<Program> criteriaQuery, Root<Program> programRoot) {
+    private void setOrder(PageProperties pageProperties, CriteriaQuery<Program> criteriaQuery, Root<Program> programRoot) {
 
-        if(programPage.getSortDirection().equals(Sort.Direction.ASC)){
-            criteriaQuery.orderBy(criteriaBuilder.asc(programRoot.get(programPage.getSortBy())));
+        if(pageProperties.getSortDirection().equals(Sort.Direction.ASC)){
+            criteriaQuery.orderBy(criteriaBuilder.asc(programRoot.get(pageProperties.getSortBy())));
         } else {
-            criteriaQuery.orderBy(criteriaBuilder.desc(programRoot.get(programPage.getSortBy())));
+            criteriaQuery.orderBy(criteriaBuilder.desc(programRoot.get(pageProperties.getSortBy())));
         }
     }
 
-    private Pageable getPageable(ProgramPage programPage) {
-        Sort sort = Sort.by(programPage.getSortDirection(), programPage.getSortBy());
-        return PageRequest.of(programPage.getPageNumber(), programPage.getPageSize(), sort);
+    private Pageable getPageable(PageProperties pageProperties) {
+        Sort sort = Sort.by(pageProperties.getSortDirection(), pageProperties.getSortBy());
+        return PageRequest.of(pageProperties.getPageNumber(), pageProperties.getPageSize(), sort);
     }
 
     private long getProgramsCount(

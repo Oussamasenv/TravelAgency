@@ -1,11 +1,9 @@
-package com.agenceVoyage.backend.criteriaRepositories;
+package com.agenceVoyage.backend.criteriaRepositories.programCq;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.ZonedDateTime;
 
 
 @Getter

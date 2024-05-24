@@ -1,7 +1,7 @@
 package com.agenceVoyage.backend.service.interfaces;
 
-import com.agenceVoyage.backend.criteriaRepositories.ProgramPage;
-import com.agenceVoyage.backend.criteriaRepositories.ProgramSearchCriteria;
+import com.agenceVoyage.backend.criteriaRepositories.PageProperties;
+import com.agenceVoyage.backend.criteriaRepositories.programCq.ProgramSearchCriteria;
 import com.agenceVoyage.backend.dto.ProgramDto;
 import com.agenceVoyage.backend.model.Program;
 import org.springframework.data.domain.Page;
@@ -19,7 +19,7 @@ public interface ProgramService {
     public List<ProgramDto> getAllPrograms();
 
     public Page<Program> getPrograms(
-            ProgramPage programPage,
+            PageProperties pageProperties,
             ProgramSearchCriteria programSearchCriteria);
 
 }
