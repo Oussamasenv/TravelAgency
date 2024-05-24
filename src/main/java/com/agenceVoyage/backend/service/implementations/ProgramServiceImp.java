@@ -1,5 +1,9 @@
 package com.agenceVoyage.backend.service.implementations;
 
+
+import com.agenceVoyage.backend.criteriaRepositories.ProgramPage;
+import com.agenceVoyage.backend.criteriaRepositories.ProgramRepositoryCq;
+import com.agenceVoyage.backend.criteriaRepositories.ProgramSearchCriteria;
 import com.agenceVoyage.backend.dto.ProgramDto;
 import com.agenceVoyage.backend.model.Filedata;
 import com.agenceVoyage.backend.model.Program;
@@ -9,11 +13,8 @@ import com.agenceVoyage.backend.service.interfaces.ProgramService;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-
-import java.io.IOException;
-import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,7 +29,15 @@ public class ProgramServiceImp implements ProgramService {
     @Autowired
     private FileDataService fileDataService;
 
-    public ProgramServiceImp(FileDataServiceImp fileDataServiceImp) {
+    private final ProgramRepositoryCq programRepositoryCq;
+
+
+
+
+    public ProgramServiceImp(
+            FileDataServiceImp fileDataServiceImp,
+            ProgramRepositoryCq programRepositoryCq) {
+        this.programRepositoryCq = programRepositoryCq;
         this.fileDataService = fileDataServiceImp;
     }
 
@@ -85,4 +94,16 @@ public class ProgramServiceImp implements ProgramService {
     public List<ProgramDto> getAllPrograms() {
         return modelMapper.map(programRepository.findAll(), new TypeToken<List<ProgramDto>>(){} .getType());
     }
+
+
+    public Page<Program> getPrograms(
+            ProgramPage programPage,
+            ProgramSearchCriteria programSearchCriteria) {
+
+        return programRepositoryCq.FindAllWithFilter(programPage, programSearchCriteria);
+
+
+    }
+
+
 }

@@ -2,10 +2,15 @@ package com.agenceVoyage.backend.controller.admin;
 
 
 import com.agenceVoyage.backend.advice.ApplicationExceptionHandler;
+import com.agenceVoyage.backend.criteriaRepositories.ProgramPage;
+import com.agenceVoyage.backend.criteriaRepositories.ProgramSearchCriteria;
 import com.agenceVoyage.backend.dto.ProgramDto;
+import com.agenceVoyage.backend.model.Program;
 import com.agenceVoyage.backend.service.implementations.ProgramServiceImp;
 import com.agenceVoyage.backend.service.interfaces.ProgramService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -73,8 +78,30 @@ public class ProgramAdminController {
     public void deleteProgram(@PathVariable long id){
 
         programService.deleteProgram(id);
+    }
+
+
+
+    @GetMapping("/programsPages")
+    public ResponseEntity<Page<Program>> getPograms(
+
+            @RequestParam int pageNumber,
+            @RequestParam int pageSize,
+            @RequestParam Sort.Direction sortDirection,
+            @RequestParam String sortBy,
+            @RequestParam String name,
+            @RequestParam String description
+
+
+
+            ) {
+
+
+        return new ResponseEntity<>(programService.getPrograms(new ProgramPage(pageNumber, pageSize, sortDirection, sortBy), new ProgramSearchCriteria(name, description)), HttpStatus.OK);
 
     }
+
+
 
 
 }

@@ -8,11 +8,11 @@
 		<version>3.2.1</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.helloIftekhar</groupId>
-	<artifactId>springJwt</artifactId>
+	<groupId>com.agenceVoyage</groupId>
+	<artifactId>travelAgency</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>springJwt</name>
-	<description>Demo project for Spring Boot</description>
+	<name>agenceVoyage</name>
+	<description>travelAgency spring boot project</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
@@ -22,6 +22,33 @@
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 
+
+
+
+		<dependency>
+			<groupId>org.hibernate.orm</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>6.4.2.Final</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+			<version>6.3.0</version> <!-- Update this to the version that fixes CVE-2024-22234 -->
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>6.1.7</version> <!-- Update this to the version that fixes CVE-2024-22234 -->
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>6.3.0</version> <!-- Update this to the version that fixes CVE-2024-22234 -->
+		</dependency>
 
 
 
@@ -89,6 +116,13 @@
 			<version>1.18.32</version>
 			<scope>provided</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>com.jayway.jsonpath</groupId>
+			<artifactId>json-path</artifactId>
+			<version>2.9.0</version> <!-- Replace with the version that fixes CVE-2023-51074 -->
+		</dependency>
+
 
 
 
