@@ -1,11 +1,14 @@
 package com.agenceVoyage.backend.dto;
 
+import com.agenceVoyage.backend.model.Reservation;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.format.annotation.NumberFormat;
+
+import java.util.Collection;
 
 
 @Getter
@@ -42,5 +45,7 @@ public class UserDto {
 
     @NotBlank
     private String password;
+
+    private Collection<Reservation> reservations;
 
 }

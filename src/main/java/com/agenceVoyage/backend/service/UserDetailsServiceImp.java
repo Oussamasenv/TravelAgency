@@ -52,12 +52,6 @@ public class UserDetailsServiceImp implements UserDetailsService {
     }
 
 
-    public User setUserToReservation(User user, Reservation reservation) {
-
-        user.setReservation(reservation);
-        return repository.save(user);
-
-    }
 
 
     public User getUser(long id){

@@ -17,6 +17,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+
+import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
@@ -39,10 +42,20 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
+        WebConfig webConfig = new WebConfig();
+
         return http
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors( cors -> cors.configurationSource( request -> {
+                    CorsConfiguration corsConfig = new CorsConfiguration();
+                    corsConfig.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
+                    corsConfig.setAllowedMethods(Collections.singletonList("*"));
+                    corsConfig.setAllowedHeaders(Collections.singletonList("*"));
+                    corsConfig.setAllowCredentials(true);
+                    return corsConfig;
+                }))
                 .authorizeHttpRequests(
-                        req->req.requestMatchers("/login/**","/register/**")
+                        req->req.requestMatchers("/login/**","/register/**", "/admin/travelsPages/**")
                                 .permitAll()
                                 .requestMatchers("/admin/travels").hasAnyAuthority("ADMIN", "USER")
                                 .requestMatchers("/admin/travels/{id}").hasAnyAuthority("ADMIN", "USER")

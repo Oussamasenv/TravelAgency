@@ -54,8 +54,8 @@ public class User implements UserDetails {
     @Enumerated(value = EnumType.STRING)
     private Role role;
 
-    @OneToOne(mappedBy = "user")
-    private Reservation reservation;
+    @OneToMany(mappedBy = "user")
+    private Collection<Reservation> reservations;
 
 
     @OneToMany(mappedBy = "user")

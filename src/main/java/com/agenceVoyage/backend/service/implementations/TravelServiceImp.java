@@ -1,16 +1,21 @@
 package com.agenceVoyage.backend.service.implementations;
 
+import com.agenceVoyage.backend.criteriaRepositories.PageProperties;
+import com.agenceVoyage.backend.criteriaRepositories.travelCq.TravelCq;
+import com.agenceVoyage.backend.criteriaRepositories.travelCq.TravelSearchCriteria;
 import com.agenceVoyage.backend.dto.AirplaneCompanyDto;
 import com.agenceVoyage.backend.dto.ProgramDto;
 import com.agenceVoyage.backend.dto.TravelDto;
 import com.agenceVoyage.backend.model.*;
 import com.agenceVoyage.backend.repository.TravelRepository;
 import com.agenceVoyage.backend.service.interfaces.AirplaneCompanyService;
+import com.agenceVoyage.backend.service.interfaces.ProgramService;
 import com.agenceVoyage.backend.service.interfaces.TravelService;
 import com.agenceVoyage.backend.wrapper.TravelData;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
@@ -28,11 +33,21 @@ public class TravelServiceImp implements TravelService {
     private TravelRepository travelRepository;
 
     private final AirplaneCompanyService airplaneCompanyService;
+
     @Autowired
     private ModelMapper modelMapper;
 
-    public TravelServiceImp(AirplaneCompanyServiceImp airplaneCompanyServiceImp) {
+    private final TravelCq travelCq;
+
+    private final ProgramService programService;
+
+    public TravelServiceImp(
+            AirplaneCompanyServiceImp airplaneCompanyServiceImp,
+            TravelCq travelCq,
+            ProgramServiceImp programServiceImp) {
         this.airplaneCompanyService = airplaneCompanyServiceImp;
+        this.travelCq = travelCq;
+        this.programService = programServiceImp;
 
     }
 
@@ -77,16 +92,18 @@ public class TravelServiceImp implements TravelService {
     @Override
     public TravelData createTravel(TravelData travelData) {
 
-        TravelDto travelDto = travelData.getTravelDto();
-        AirplaneCompanyDto airplaneCompanyDto = travelData.getAirplaneCompanyDto();
-
-
-        ConcurrentLinkedQueue<ProgramDto> programDtos = travelData.getProgramDtos();
-
         int duration = 0;
 
-        for(ProgramDto programDto : programDtos) {
+        TravelDto travelDto = travelData.getTravelDto();
+        ConcurrentLinkedQueue<AirplaneCompanyDto> airplaneCompanyDtos = travelData.getAirplaneCompanyDtos();
+
+        // i need to get the program from database then assign it to travel
+        ConcurrentLinkedQueue<ProgramDto> programDtos = travelData.getProgramDtos();
+
+        for (ProgramDto programDto : travelData.getProgramDtos()) {
             duration += programDto.getDuration();
+//            ProgramDto programDt = modelMapper.map(programService.getReferenceProgram(programDto.getId()), ProgramDto.class);
+//            programDtos.add(programDt);
         }
 
 
@@ -95,8 +112,8 @@ public class TravelServiceImp implements TravelService {
         travelDto.setPlacesLeft(travelDto.getGroupSize());
         travelDto.setDuration(duration);
         travelDto.setReturnDate(returnDate);
-        travelDto.setPrograms(travelData.getProgramDtos());
-        travelDto.setAirplaneCompany(airplaneCompanyDto);
+        travelDto.setPrograms(programDtos);
+        travelDto.setAirplaneCompanies(airplaneCompanyDtos);
         travelRepository.save(modelMapper.map(travelDto, Travel.class));
 
 
@@ -115,9 +132,11 @@ public class TravelServiceImp implements TravelService {
 
         Optional<Travel> optionalTravel = travelRepository.findById(id);
 
+
         if (optionalTravel.isPresent()) {
             Travel travel = optionalTravel.get();
-            travel.setAirplaneCompany(modelMapper.map(travelDto.getAirplaneCompany(), AirplaneCompany.class));
+            travel.setAirplaneCompanies(modelMapper.map(travelDto.getAirplaneCompanies(), new TypeToken<List<AirplaneCompany>>() {
+            }.getType()));
             travel.setDeparture(travelDto.getDeparture());
             travel.setDuration(travelDto.getDuration());
             travel.setReturnDate(travelDto.getReturnDate());
@@ -138,6 +157,11 @@ public class TravelServiceImp implements TravelService {
     @Override
     public List<TravelDto> getTravels() {
         return modelMapper.map(travelRepository.findAll(), new TypeToken<List<TravelDto>>() {} .getType());
+    }
+
+    @Override
+    public Page<Travel> getAllTravels(PageProperties pageProperties, TravelSearchCriteria travelSearchCriteria) {
+        return travelCq.findAllWithFilter(pageProperties, travelSearchCriteria);
     }
 
 }

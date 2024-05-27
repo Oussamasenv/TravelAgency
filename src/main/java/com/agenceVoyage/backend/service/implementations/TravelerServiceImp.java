@@ -1,9 +1,7 @@
 package com.agenceVoyage.backend.service.implementations;
 
-import com.agenceVoyage.backend.dto.TravelDto;
 import com.agenceVoyage.backend.dto.TravelerDto;
 import com.agenceVoyage.backend.model.Traveler;
-import com.agenceVoyage.backend.repository.TravelRepository;
 import com.agenceVoyage.backend.repository.TravelerRepository;
 import com.agenceVoyage.backend.service.interfaces.TravelerService;
 import org.modelmapper.ModelMapper;
@@ -13,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Service

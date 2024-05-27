@@ -2,7 +2,7 @@ package com.agenceVoyage.backend.service.implementations;
 
 
 import com.agenceVoyage.backend.criteriaRepositories.PageProperties;
-import com.agenceVoyage.backend.criteriaRepositories.programCq.ProgramRepositoryCq;
+import com.agenceVoyage.backend.criteriaRepositories.programCq.ProgramCq;
 import com.agenceVoyage.backend.criteriaRepositories.programCq.ProgramSearchCriteria;
 import com.agenceVoyage.backend.dto.ProgramDto;
 import com.agenceVoyage.backend.model.Filedata;
@@ -15,8 +15,11 @@ import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Service
 public class ProgramServiceImp implements ProgramService {
@@ -29,29 +32,35 @@ public class ProgramServiceImp implements ProgramService {
     @Autowired
     private FileDataService fileDataService;
 
-    private final ProgramRepositoryCq programRepositoryCq;
+    private final ProgramCq programCq;
 
 
 
 
     public ProgramServiceImp(
             FileDataServiceImp fileDataServiceImp,
-            ProgramRepositoryCq programRepositoryCq) {
-        this.programRepositoryCq = programRepositoryCq;
+            ProgramCq programCq) {
+        this.programCq = programCq;
         this.fileDataService = fileDataServiceImp;
     }
 
     @Override
     public ProgramDto saveProgram(ProgramDto programDto) {
 
-        if (programDto.getFile() != null) {
+        if (!programDto.getFiles().isEmpty()) {
             try {
 
 
-                Filedata filedata = fileDataService.uploadImageToFIleSystem(programDto.getFile());
-                System.out.println("filedata: " + filedata.getId());
-                programDto.setFiledata(filedata);
+                ConcurrentLinkedQueue<Filedata> filedatas = new ConcurrentLinkedQueue<>();
 
+                for (MultipartFile file : programDto.getFiles()) {
+
+                    Filedata filedata = fileDataService.uploadImageToFIleSystem(file);
+                    filedatas.add(filedata);
+
+                }
+
+                programDto.setFiledatas(filedatas);
 
                 return modelMapper.map(programRepository.save(modelMapper.map(programDto, Program.class)), ProgramDto.class);
 
@@ -100,9 +109,14 @@ public class ProgramServiceImp implements ProgramService {
             PageProperties pageProperties,
             ProgramSearchCriteria programSearchCriteria) {
 
-        return programRepositoryCq.FindAllWithFilter(pageProperties, programSearchCriteria);
+        return programCq.FindAllWithFilter(pageProperties, programSearchCriteria);
 
 
+    }
+
+    @Override
+    public ProgramDto getReferenceProgram(long id) {
+        return modelMapper.map(programRepository.getReferenceById(id), ProgramDto.class);
     }
 
 

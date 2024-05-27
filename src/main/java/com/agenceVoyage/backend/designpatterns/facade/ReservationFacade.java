@@ -54,6 +54,7 @@ public class ReservationFacade {
         ConcurrentLinkedQueue<TravelerDto> travelerDtos = reservationData.getTravelerDtos();
         ConcurrentLinkedQueue<FacilityDto> facilityDtos = reservationData.getFacilityDtos();
         User user = userService.getUser(reservationData.getUserId());
+        ConcurrentLinkedQueue<ReservationDto> reservationDtos = new ConcurrentLinkedQueue<>();
 
 
 

@@ -41,7 +41,6 @@ public class FileDataServiceImp implements FileDataService {
     public byte[] downloadImageFromFileSystem(String fileName) throws IOException {
         Optional<Filedata> fileData = fileDataRepository.findByName(fileName);
         String filePath=fileData.get().getFilePath();
-        byte[] images = Files.readAllBytes(new File(filePath).toPath());
-        return images;
+        return Files.readAllBytes(new File(filePath).toPath());
     }
 }

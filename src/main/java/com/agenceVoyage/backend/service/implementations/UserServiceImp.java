@@ -14,8 +14,11 @@ import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Service
 @NoArgsConstructor
@@ -38,9 +41,15 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public User setUserToReservation(User user, ReservationDto reservationDto) {
+    public User setUserToReservation(User user, ReservationDto reservationDto ) {
 
-        user.setReservation(modelMapper.map(reservationDto, Reservation.class));
+        ConcurrentLinkedQueue<ReservationDto> reservationDtos = new ConcurrentLinkedQueue<>();
+        reservationDtos.add(reservationDto);
+
+        Type type = new TypeToken<ConcurrentLinkedQueue<Reservation>>() {
+        }.getType();
+
+        user.setReservations(modelMapper.map(reservationDtos, type));
         return userRepository.save(user);
 
     }

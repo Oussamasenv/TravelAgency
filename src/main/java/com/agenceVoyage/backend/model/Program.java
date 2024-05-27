@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.util.Collection;
+
 
 @Getter
 @Setter
@@ -27,9 +29,13 @@ public class Program {
     @Size(min = 3, max = 50)
     private String description;
 
-    @OneToOne
+    @NotBlank
+    @Size(min = 3, max = 20)
+    private String destination;
+
+    @ManyToMany
     @NotNull
-    private Filedata filedata;
+    private Collection<Filedata> filedatas;
 
 
     @NotNull

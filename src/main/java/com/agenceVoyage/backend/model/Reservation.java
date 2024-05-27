@@ -36,7 +36,7 @@ public class Reservation {
     @Enumerated(EnumType.STRING)
     private ReservationStatus reservationStatus;
 
-    @OneToOne
+    @ManyToOne
     @NotNull
     private User user;
 
@@ -48,7 +48,7 @@ public class Reservation {
     @NotNull
     private Travel travel;
 
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @NotNull
     private Collection<Room> rooms;
 

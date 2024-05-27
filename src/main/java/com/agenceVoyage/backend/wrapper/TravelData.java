@@ -21,6 +21,6 @@ public class TravelData {
     @NotNull
     private ConcurrentLinkedQueue<ProgramDto> programDtos;
     @NotNull
-    private AirplaneCompanyDto airplaneCompanyDto;
+    private ConcurrentLinkedQueue<AirplaneCompanyDto> airplaneCompanyDtos;
 
 }

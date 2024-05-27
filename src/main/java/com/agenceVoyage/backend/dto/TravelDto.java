@@ -23,6 +23,10 @@ public class TravelDto {
     private String name;
 
     @NotNull
+    @Enumerated(EnumType.STRING)
+    private Continent continent;
+
+    @NotNull
     @FutureOrPresent
     private ZonedDateTime departure;
 
@@ -61,9 +65,12 @@ public class TravelDto {
 
 
     @NotNull
-    private AirplaneCompanyDto airplaneCompany;
+    private Collection<AirplaneCompanyDto> airplaneCompanies;
 
-    @NonNull
+    @NotNull
     private Collection<ProgramDto> programs;
+
+    public Collection<Facility> facilities;
+
 
 }

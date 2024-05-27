@@ -22,4 +22,6 @@ public interface ProgramService {
             PageProperties pageProperties,
             ProgramSearchCriteria programSearchCriteria);
 
+
+    public ProgramDto getReferenceProgram(long id);
 }

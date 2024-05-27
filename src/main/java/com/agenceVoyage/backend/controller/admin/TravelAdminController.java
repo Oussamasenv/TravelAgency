@@ -2,11 +2,16 @@ package com.agenceVoyage.backend.controller.admin;
 
 
 import com.agenceVoyage.backend.advice.ApplicationExceptionHandler;
+import com.agenceVoyage.backend.criteriaRepositories.PageProperties;
+import com.agenceVoyage.backend.criteriaRepositories.travelCq.TravelSearchCriteria;
 import com.agenceVoyage.backend.dto.TravelDto;
+import com.agenceVoyage.backend.model.Travel;
 import com.agenceVoyage.backend.service.implementations.TravelServiceImp;
 import com.agenceVoyage.backend.service.interfaces.TravelService;
 import com.agenceVoyage.backend.wrapper.TravelData;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -75,6 +80,19 @@ public class TravelAdminController {
 
         travelService.deleteTravel(id);
         return ResponseEntity.ok("Travel deleted successfully");
+    }
+
+
+    @GetMapping("/travelsPages")
+    public ResponseEntity<Page<Travel>> getAllTravelsPages(
+            @RequestParam int pageNumber,
+            @RequestParam int pageSize,
+            @RequestParam Sort.Direction sortDirection,
+            @RequestParam String sortBy,
+            @RequestParam String name) {
+
+        return new  ResponseEntity<>(travelService.getAllTravels(new PageProperties(pageNumber, pageSize, sortDirection, sortBy), new TravelSearchCriteria(name)), HttpStatus.OK);
+
     }
 
 

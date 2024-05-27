@@ -2,10 +2,6 @@ package com.agenceVoyage.backend.model;
 
 import java.time.ZonedDateTime;
 import java.util.Collection;
-import java.util.concurrent.ConcurrentLinkedQueue;
-
-import com.agenceVoyage.backend.dto.AirplaneCompanyDto;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -29,6 +25,11 @@ public class Travel {
     @Column(unique = true)
     private String name;
 
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private Continent continent;
+
     @NotNull
     @FutureOrPresent
     private ZonedDateTime departure;
@@ -51,6 +52,7 @@ public class Travel {
     @DecimalMin(value = "0.0")
     private double initialPrice;
 
+
     @DecimalMin(value = "0.0")
     private double discountedPrice;
 
@@ -64,22 +66,20 @@ public class Travel {
     @NotNull
     private int placesLeft;
 
-    @ManyToOne
-    @JoinColumn(
-            name = "airplane_company_id",
-            referencedColumnName = "id"
-    )
+    @ManyToMany
+//    @JoinColumn(
+//            name = "airplane_company_id",
+//            referencedColumnName = "id"
+//    )
     @NotNull
-    private AirplaneCompany airplaneCompany;
+    private Collection<AirplaneCompany> airplaneCompanies;
 
-    @OneToMany
+    @ManyToMany
     @NotNull
     private Collection<Program> programs;
 
 
-    @OneToMany
+    @ManyToMany
     public Collection<Facility> facilities;
-
-
 
 }

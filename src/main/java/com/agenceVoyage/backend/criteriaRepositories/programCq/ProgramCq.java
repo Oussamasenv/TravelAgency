@@ -18,13 +18,13 @@ import java.util.List;
 import java.util.Objects;
 
 @Repository
-public class ProgramRepositoryCq {
+public class ProgramCq {
 
     @PersistenceContext
     private EntityManager em;
     private final CriteriaBuilder criteriaBuilder;
 
-    public ProgramRepositoryCq(EntityManager em) {
+    public ProgramCq(EntityManager em) {
         this.em = em;
         this.criteriaBuilder = em.getCriteriaBuilder();
     }
