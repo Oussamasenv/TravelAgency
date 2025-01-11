@@ -26,6 +26,8 @@ public interface TravelerService {
 
     public TravelerDto updateTraveler(long id, TravelerDto travelerDto);
 
+    public TravelerDto getTravelerById(long id);
+
 
 
 

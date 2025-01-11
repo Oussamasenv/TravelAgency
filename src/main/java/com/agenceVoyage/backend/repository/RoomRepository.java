@@ -12,4 +12,6 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 
     Boolean existsById(double id);
 
+    public ConcurrentLinkedQueue<Room> getRoomsByIdIs(List<Long> ids);
+
  }

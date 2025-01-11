@@ -28,7 +28,7 @@ public interface TravelService {
 
     public List<TravelDto> getTravels();
 
-    public Page<Travel> getAllTravels(
+    public Page<TravelDto> getAllTravels(
             PageProperties pageProperties,
             TravelSearchCriteria travelSearchCriteria
     );

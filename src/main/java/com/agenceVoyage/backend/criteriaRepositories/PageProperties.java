@@ -14,9 +14,8 @@ import org.springframework.data.domain.Sort;
 
 public class PageProperties {
     private int pageNumber = 0;
-    private int pageSize = 10;
-    private Sort.Direction sortDirection = Sort.Direction.ASC;
+    private int pageSize = 9;
+    private Sort.Direction sortDirection = Sort.Direction.DESC;
     private String sortBy = "id";
-
 
 }

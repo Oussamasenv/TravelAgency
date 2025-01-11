@@ -49,14 +49,17 @@ public class FacilityServiceImp implements FacilityService {
         if(facilityDtos == null || facilityDtos.isEmpty()) {
             return 0;
         }
+
         ServicePricing servicePricing;
         
         double flightPricing = 0;
 
         for (FacilityDto facilityDto : facilityDtos){
             if(facilityDto.getFacilityPricingType() == FacilityPricingType.LONG_DURATION){
+
                 flightPricing += DurationPricingStrategy.calculatePricing(travelDto.getDuration(), facilityDto.getBasePricePerDay(), travelDto.getFacilityDays());
             } else if (facilityDto.getFacilityPricingType() == FacilityPricingType.SPECIFIC_DURATION){
+
                 flightPricing += DailyPricingStartegy.calculatePricing(travelDto.getDuration(), facilityDto.getBasePricePerDay(), travelDto.getFacilityDays());
             }
 
@@ -90,6 +93,11 @@ public class FacilityServiceImp implements FacilityService {
             throw new RuntimeException("Facility not found");
         }
 
+    }
+
+    @Override
+    public FacilityDto getFacilityById(long id) {
+        return modelMapper.map(facilityRepository.findById(id), FacilityDto.class);
     }
 
 

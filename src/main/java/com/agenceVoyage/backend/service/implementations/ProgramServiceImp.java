@@ -5,6 +5,7 @@ import com.agenceVoyage.backend.criteriaRepositories.PageProperties;
 import com.agenceVoyage.backend.criteriaRepositories.programCq.ProgramCq;
 import com.agenceVoyage.backend.criteriaRepositories.programCq.ProgramSearchCriteria;
 import com.agenceVoyage.backend.dto.ProgramDto;
+import com.agenceVoyage.backend.model.Facility;
 import com.agenceVoyage.backend.model.Filedata;
 import com.agenceVoyage.backend.model.Program;
 import com.agenceVoyage.backend.repository.ProgramRepository;
@@ -37,11 +38,13 @@ public class ProgramServiceImp implements ProgramService {
 
 
 
+
     public ProgramServiceImp(
             FileDataServiceImp fileDataServiceImp,
             ProgramCq programCq) {
         this.programCq = programCq;
         this.fileDataService = fileDataServiceImp;
+
     }
 
     @Override
@@ -102,6 +105,14 @@ public class ProgramServiceImp implements ProgramService {
     @Override
     public List<ProgramDto> getAllPrograms() {
         return modelMapper.map(programRepository.findAll(), new TypeToken<List<ProgramDto>>(){} .getType());
+    }
+
+    @Override
+    public ConcurrentLinkedQueue<ProgramDto> getProgramsByIds(List<Long> ids) {
+
+        ConcurrentLinkedQueue<Program> programs = programRepository.getProgramsByIdIs(ids);
+        return modelMapper.map(programs, new TypeToken<List<ProgramDto>>() {} .getType());
+
     }
 
 

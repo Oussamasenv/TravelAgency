@@ -79,7 +79,7 @@ public class AuthenticationService {
         User user = repository.findByEmail(request.getEmail()).orElseThrow();
         String jwt = jwtService.generateToken(user);
 
-        revokeAllTokenByUser(user);
+//        revokeAllTokenByUser(user);
         saveUserToken(jwt, user);
 
         return new AuthenticationResponse(jwt, "User login was successful");

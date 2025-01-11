@@ -1,5 +1,6 @@
 package com.agenceVoyage.backend.service.interfaces;
 
+import com.agenceVoyage.backend.dto.ReservationDto;
 import com.agenceVoyage.backend.dto.RoomDto;
 import com.agenceVoyage.backend.model.Room;
 
@@ -20,7 +21,11 @@ public interface RoomService {
 
     public void deleteRoom(long id);
 
-    public Optional<RoomDto> getRoom(long id);
+    public RoomDto getRoom(long id);
 
     public RoomDto updateRoom(long id, RoomDto room);
+
+    public ConcurrentLinkedQueue<RoomDto> getAllRooms();
+
+    public ConcurrentLinkedQueue<RoomDto> getRoomsByIds(List<Long> ids);
 }

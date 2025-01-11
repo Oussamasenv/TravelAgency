@@ -18,6 +18,10 @@ public class TravelSearchCriteria {
 //    private String destination;
 //    private ZonedDateTime departure;
     private String name;
+    private String destination;
+    private int duration;
+    private int travelers;
+    private String type;
 
 
 

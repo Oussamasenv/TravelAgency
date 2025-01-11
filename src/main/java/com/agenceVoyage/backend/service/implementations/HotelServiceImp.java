@@ -1,8 +1,11 @@
 package com.agenceVoyage.backend.service.implementations;
 
 import com.agenceVoyage.backend.dto.HotelDto;
+import com.agenceVoyage.backend.dto.ProgramDto;
 import com.agenceVoyage.backend.dto.RoomDto;
+import com.agenceVoyage.backend.model.Filedata;
 import com.agenceVoyage.backend.model.Hotel;
+import com.agenceVoyage.backend.model.Program;
 import com.agenceVoyage.backend.model.RoomAvailability;
 import com.agenceVoyage.backend.repository.HotelRepository;
 import com.agenceVoyage.backend.service.interfaces.HotelService;
@@ -12,7 +15,10 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -28,16 +34,51 @@ public class HotelServiceImp implements HotelService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public HotelServiceImp(RoomServiceImp roomServiceImp) {
+    private final FileDataServiceImp fileDataService;
+
+    public HotelServiceImp(
+            RoomServiceImp roomServiceImp,
+            FileDataServiceImp fileDataServiceImp) {
         this.roomService = roomServiceImp;
+        this.fileDataService = fileDataServiceImp;
     }
 
     @Override
     public HotelDto createHotel(HotelDto hotelDto) {
 
-//        return hotelMapper.toHotelDto(hotelRepository.save(hotelMapper.toHotel(hotelDto)));
-        return modelMapper.map(hotelRepository.save(modelMapper.map(hotelDto, Hotel.class)), HotelDto.class);
-    }
+
+
+            if (!hotelDto.getFiles().isEmpty()) {
+                try {
+
+
+                    ConcurrentLinkedQueue<Filedata> filedatas = new ConcurrentLinkedQueue<>();
+
+                    for (MultipartFile file : hotelDto.getFiles()) {
+
+                        Filedata filedata = fileDataService.uploadImageToFIleSystem(file);
+                        filedatas.add(filedata);
+
+                    }
+
+                    hotelDto.setFiledatas(filedatas);
+
+                    return modelMapper.map(hotelRepository.save(modelMapper.map(hotelDto, Hotel.class)), HotelDto.class);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                System.out.println("no file");
+            }
+
+
+            return null;
+
+
+        }
+
+
 
     @Override
     public HotelDto createHotelWithRooms(HotelData hotelData) {
@@ -45,6 +86,21 @@ public class HotelServiceImp implements HotelService {
         HotelDto hotelDto = hotelData.getHotelDto();
         ConcurrentLinkedQueue<RoomDto> roomDtos = hotelData.getRoomDtos();
 
+        ConcurrentLinkedQueue<Filedata> filedatas = new ConcurrentLinkedQueue<>();
+
+        for (MultipartFile file : hotelDto.getFiles()) {
+
+            Filedata filedata = null;
+            try {
+                filedata = fileDataService.uploadImageToFIleSystem(file);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            filedatas.add(filedata);
+
+        }
+
+        hotelDto.setFiledatas(filedatas);
         for (RoomDto roomDto : roomDtos) {
             System.out.println(roomDto.getRoomNumber());
             System.out.println(roomDto.getPricePerNight());
@@ -60,18 +116,10 @@ public class HotelServiceImp implements HotelService {
 
         System.out.println(hotelDto.getLocation());
 
-
-//        hotelRepository.save(hotelMapper.toHotel(hotelDto));
-
         for(RoomDto roomDto : roomDtos) {
             roomDto.setHotelDto(savedHotelDto);
         }
-
-//        roomService.saveAll(roomDtos);
-
         roomService.saveAll(roomDtos);
-
-
         return savedHotelDto;
     }
 

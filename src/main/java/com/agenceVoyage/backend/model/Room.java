@@ -10,6 +10,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -37,5 +40,9 @@ public class Room {
 
     @ManyToOne
     private Hotel hotel;
+
+    @ManyToMany
+    @NotNull
+    private Collection<Filedata> filedatas;
 
 }

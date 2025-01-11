@@ -21,7 +21,7 @@ public class FileDataServiceImp implements FileDataService {
 
     @Override
     public Filedata uploadImageToFIleSystem(MultipartFile file)  throws IOException {
-        String FOLDER_PATH = "C:/Users/PcMac/Desktop/jwt+react/TravelAgency/src/main/java/com/agenceVoyage/backend/assets/";
+        String FOLDER_PATH = "C:/Users/PcMac/Desktop/travelagnecy/frontend-travelagency/public/images/";
         String filePath= FOLDER_PATH +file.getOriginalFilename();
 
         Filedata filedata = Filedata.builder()

@@ -8,6 +8,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 
 @Getter
@@ -36,7 +37,7 @@ public class Reservation {
     @Enumerated(EnumType.STRING)
     private ReservationStatus reservationStatus;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @NotNull
     private User user;
 
@@ -44,7 +45,7 @@ public class Reservation {
     @NotNull
     private Collection<Traveler> travelers;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
     @NotNull
     private Travel travel;
 
@@ -52,7 +53,8 @@ public class Reservation {
     @NotNull
     private Collection<Room> rooms;
 
-    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private Collection<Facility> facilities;
 
 }
+

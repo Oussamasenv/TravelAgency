@@ -10,6 +10,8 @@ import com.agenceVoyage.backend.service.implementations.TravelServiceImp;
 import com.agenceVoyage.backend.service.interfaces.TravelService;
 import com.agenceVoyage.backend.wrapper.TravelData;
 import jakarta.validation.Valid;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -18,15 +20,19 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/admin")
 public class TravelAdminController {
 
 
     private final TravelService travelService;
+    private final ModelMapper modelMapper;
 
-    public TravelAdminController(TravelServiceImp travelServiceImp) {
+    public TravelAdminController(TravelServiceImp travelServiceImp, ModelMapper modelMapper) {
         this.travelService = travelServiceImp;
+        this.modelMapper = modelMapper;
     }
 
 
@@ -44,15 +50,21 @@ public class TravelAdminController {
 
         }
 
+        travelService.createTravel(travelData);
+        return ResponseEntity.ok(travelData);
 
-        return ResponseEntity.ok(travelService.createTravel(travelData));
+    }
 
+    @GetMapping("/travels/{id}")
+    public ResponseEntity<?> getTravelById(@PathVariable Long id) {
+        return ResponseEntity.ok(travelService.getTravel(id));
     }
 
     @GetMapping("/travels")
     public ResponseEntity<?> getAllTravels(){
 
-        return ResponseEntity.ok(travelService.getTravels());
+        return ResponseEntity.ok(modelMapper.map(travelService.getTravels(), new TypeToken<List<TravelDto>>() {
+        }.getType()));
     }
 
     @PutMapping("/travels/{id}")
@@ -79,24 +91,26 @@ public class TravelAdminController {
     public ResponseEntity<?> deleteTravel(@Valid @PathVariable long id){
 
         travelService.deleteTravel(id);
-        return ResponseEntity.ok("Travel deleted successfully");
+        String message = "Travel deleted successfully: ";
+        return ResponseEntity.ok(message + id);
     }
 
 
     @GetMapping("/travelsPages")
-    public ResponseEntity<Page<Travel>> getAllTravelsPages(
+    public ResponseEntity<Page<TravelDto>> getAllTravelsPages(
             @RequestParam int pageNumber,
             @RequestParam int pageSize,
             @RequestParam Sort.Direction sortDirection,
             @RequestParam String sortBy,
-            @RequestParam String name) {
+            @RequestParam String name,
+            @RequestParam String destination,
+            @RequestParam int duration,
+            @RequestParam int travelers,
+            @RequestParam String type
+            ) {
 
-        return new  ResponseEntity<>(travelService.getAllTravels(new PageProperties(pageNumber, pageSize, sortDirection, sortBy), new TravelSearchCriteria(name)), HttpStatus.OK);
+        return new  ResponseEntity<>(travelService.getAllTravels(new PageProperties(pageNumber, pageSize, sortDirection, sortBy), new TravelSearchCriteria(name, destination, duration, travelers, type)), HttpStatus.OK);
 
     }
-
-
-
-
 
 }

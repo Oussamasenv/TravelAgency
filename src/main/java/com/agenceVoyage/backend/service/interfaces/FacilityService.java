@@ -22,4 +22,6 @@ public interface FacilityService {
 
     public FacilityDto updateFacility(long id, FacilityDto facilityDto);
 
+    public FacilityDto getFacilityById(long id);
+
 }

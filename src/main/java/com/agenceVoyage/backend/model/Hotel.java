@@ -9,6 +9,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
@@ -33,7 +34,7 @@ public class Hotel {
 
     @NotNull
     @Min(0)
-    private int starts;
+    private int stars;
 
     @NotNull
     @Min(0)
@@ -41,5 +42,9 @@ public class Hotel {
 
     @OneToMany(mappedBy = "hotel")
     private Collection<Room> rooms;
+
+    @ManyToMany
+//    @NotNull
+    private Collection<Filedata> filedatas;
 
 }

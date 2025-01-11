@@ -8,6 +8,9 @@ import com.agenceVoyage.backend.model.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -17,23 +20,35 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 @NoArgsConstructor
 @Builder
 public class ReservationData {
-//    private long flightId;
-//    private ArrayList<Long> roomsIds = new ArrayList<>();
-//    private HashMap<String, ArrayList<Long>> facilitiesIdsAndPricingType;
-//    private ConcurrentLinkedDeque<Traveler> travelers;
-//    private long userId;
 
-    @NotNull
-    private TravelDto travelDto;
-    @NotNull
-    private ConcurrentLinkedQueue<RoomDto> roomDtos;
 
-    private ConcurrentLinkedQueue<FacilityDto> facilityDtos;
-
-    @NotNull
+    private long travelId;
+    private ArrayList<Long> roomsIds = new ArrayList<>();
+    private List<Long> facilityIds = new ArrayList<>();
+//        private ConcurrentLinkedQueue<RoomDto> roomDtos;
+//    private ConcurrentLinkedQueue<FacilityDto> facilityDtos;
     private ConcurrentLinkedQueue<TravelerDto> travelerDtos;
-
-    @NotNull
     private long userId;
+
+//    @NotNull
+//    private TravelDto travelDto;
+//    @NotNull
+//    private ConcurrentLinkedQueue<RoomDto> roomDtos;
+//
+//    private ConcurrentLinkedQueue<FacilityDto> facilityDtos;
+//
+//    @NotNull
+//    private ConcurrentLinkedQueue<TravelerDto> travelerDtos;
+
+//    @NotNull
+//    private long userId;
+//
+//    private Long travelId;
+//    private List<Long> roomIds;
+//
+//    @NotNull
+//    private ConcurrentLinkedQueue<TravelerDto> travelerDtos;
+
+
 
 }

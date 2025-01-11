@@ -11,5 +11,7 @@ public interface TravelRepository extends JpaRepository<Travel, Long> {
 
     public Boolean existsFlightById(double id);
 
+    public List<Travel> findTravelsByIdIs(List<Long> ids);
+
 
 }

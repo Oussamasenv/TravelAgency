@@ -7,6 +7,7 @@ import com.agenceVoyage.backend.model.Program;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public interface ProgramService {
 
@@ -17,6 +18,8 @@ public interface ProgramService {
     public ProgramDto updateProgram(long id, ProgramDto programDto);
 
     public List<ProgramDto> getAllPrograms();
+
+    public ConcurrentLinkedQueue<ProgramDto> getProgramsByIds(List<Long> ids);
 
     public Page<Program> getPrograms(
             PageProperties pageProperties,

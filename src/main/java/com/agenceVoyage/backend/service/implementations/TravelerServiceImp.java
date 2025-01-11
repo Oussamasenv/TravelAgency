@@ -69,5 +69,10 @@ public class TravelerServiceImp implements TravelerService {
 
     }
 
+    @Override
+    public TravelerDto getTravelerById(long id) {
+        return modelMapper.map(travelerRepository.findById(id).get(), TravelerDto.class);
+    }
+
 
 }

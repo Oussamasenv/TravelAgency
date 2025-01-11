@@ -2,6 +2,8 @@ package com.agenceVoyage.backend.model;
 
 import java.time.ZonedDateTime;
 import java.util.Collection;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -29,6 +31,10 @@ public class Travel {
     @NotNull
     @Enumerated(EnumType.STRING)
     private Continent continent;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private Country country;
 
     @NotNull
     @FutureOrPresent
@@ -67,10 +73,6 @@ public class Travel {
     private int placesLeft;
 
     @ManyToMany
-//    @JoinColumn(
-//            name = "airplane_company_id",
-//            referencedColumnName = "id"
-//    )
     @NotNull
     private Collection<AirplaneCompany> airplaneCompanies;
 
@@ -81,5 +83,9 @@ public class Travel {
 
     @ManyToMany
     public Collection<Facility> facilities;
+
+    @ManyToMany
+    @NotNull
+    public Collection<Room> rooms;
 
 }

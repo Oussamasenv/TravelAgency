@@ -2,6 +2,7 @@ package com.agenceVoyage.backend.service.implementations;
 
 import com.agenceVoyage.backend.dto.AirplaneCompanyDto;
 import com.agenceVoyage.backend.model.AirplaneCompany;
+import com.agenceVoyage.backend.model.Facility;
 import com.agenceVoyage.backend.repository.AirplaneCompanyRepository;
 import com.agenceVoyage.backend.service.interfaces.AirplaneCompanyService;
 import org.modelmapper.ModelMapper;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Service
 public class AirplaneCompanyServiceImp implements AirplaneCompanyService {
@@ -52,5 +54,12 @@ public class AirplaneCompanyServiceImp implements AirplaneCompanyService {
 
         airplaneCompanyRepository.deleteById(id);
 
+    }
+
+    @Override
+    public ConcurrentLinkedQueue<AirplaneCompanyDto> getAirplaneCompaniesDtoByIds(List<Long> ids) {
+
+        ConcurrentLinkedQueue<AirplaneCompany> airplaneCompanies = airplaneCompanyRepository.getAirplaneCompaniesByIdIs(ids);
+        return modelMapper.map(airplaneCompanies, new TypeToken<List<AirplaneCompanyDto>>() {} .getType());
     }
 }

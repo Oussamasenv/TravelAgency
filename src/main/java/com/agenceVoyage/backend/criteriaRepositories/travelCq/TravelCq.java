@@ -2,14 +2,13 @@ package com.agenceVoyage.backend.criteriaRepositories.travelCq;
 
 
 import com.agenceVoyage.backend.criteriaRepositories.PageProperties;
+import com.agenceVoyage.backend.dto.TravelDto;
 import com.agenceVoyage.backend.model.Program;
 import com.agenceVoyage.backend.model.Travel;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.*;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Repository;
@@ -17,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 
 @Repository
@@ -25,6 +25,8 @@ public class TravelCq {
     @Autowired
     private EntityManager em;
     private CriteriaBuilder criteriaBuilder;
+    @Autowired
+    private ModelMapper modelMapper;
 
     public TravelCq(EntityManager em) {
         this.criteriaBuilder = em.getCriteriaBuilder();
@@ -32,7 +34,7 @@ public class TravelCq {
 
 
 
-    public Page<Travel> findAllWithFilter(
+    public Page<TravelDto> findAllWithFilter(
             PageProperties pageProperties,
             TravelSearchCriteria travelSearchCriteria){
 
@@ -45,11 +47,18 @@ public class TravelCq {
         typedQuery.setFirstResult(pageProperties.getPageNumber() * pageProperties.getPageSize());
         typedQuery.setMaxResults(pageProperties.getPageSize());
 
+
         Pageable pageable = getPageable(pageProperties);
 
-        Long programCounts = getProgramsCount(travelSearchCriteria);
+        Long travelsCount = getTravelsCount(travelSearchCriteria);
 
-        return new PageImpl<>(typedQuery.getResultList(), pageable, programCounts);
+        List<TravelDto> travelDtoList = typedQuery.getResultList().stream()
+                .map(
+                        travel -> modelMapper.map(travel, TravelDto.class)
+                )
+                .toList();
+
+        return new PageImpl<>(travelDtoList, pageable, travelsCount);
 
     }
 
@@ -66,6 +75,35 @@ public class TravelCq {
                     criteriaBuilder.like(travelRoot.get("name"), "%" + travelSearchCriteria.getName() + "%")
             );
         }
+
+        if(travelSearchCriteria.getDuration() != 0) {
+            predicates.add(
+                    criteriaBuilder.equal(travelRoot.get("duration"), travelSearchCriteria.getDuration())
+            );
+        }
+
+        if(travelSearchCriteria.getTravelers() != 0) {
+            predicates.add(
+                    criteriaBuilder.greaterThanOrEqualTo(travelRoot.get("placesLeft"), travelSearchCriteria.getTravelers())
+            );
+
+        }
+
+        if(Objects.nonNull(travelSearchCriteria.getDestination())){
+            Join<Travel, Program> programJoin = travelRoot.join("programs");
+            predicates.add(
+                    criteriaBuilder.like(programJoin.get("destination"), "%" + travelSearchCriteria.getDestination() + "%")
+            );
+        }
+
+        if(!travelSearchCriteria.getType().isEmpty()) {
+
+            predicates.add(
+                    criteriaBuilder.equal(travelRoot.get("type"), travelSearchCriteria.getType())
+            );
+        }
+
+
 
         return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
     }
@@ -86,11 +124,11 @@ public class TravelCq {
         return PageRequest.of(pageProperties.getPageNumber(), pageProperties.getPageSize(), sort);
     }
 
-    private Long getProgramsCount(TravelSearchCriteria travelSearchCriteria) {
+    private Long getTravelsCount(TravelSearchCriteria travelSearchCriteria) {
         CriteriaQuery<Long> countQuery = criteriaBuilder.createQuery(Long.class);
         Root<Travel> countRoot = countQuery.from(Travel.class);
         Predicate countPredicate = getPredicate(travelSearchCriteria, countRoot);
-        countQuery.select(criteriaBuilder.count(countRoot)).where(countPredicate);
+        countQuery.select(criteriaBuilder.countDistinct(countRoot)).where(countPredicate);
 
         return em.createQuery(countQuery).getSingleResult();
     }

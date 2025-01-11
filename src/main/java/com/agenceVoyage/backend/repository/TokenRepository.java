@@ -18,3 +18,4 @@ where t.user.id = :userId and t.loggedOut = false
 
     Optional<Token> findByToken(String token);
 }
+

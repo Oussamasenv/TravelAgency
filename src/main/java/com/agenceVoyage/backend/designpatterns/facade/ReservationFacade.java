@@ -5,6 +5,10 @@ import com.agenceVoyage.backend.model.*;
 import com.agenceVoyage.backend.service.implementations.*;
 import com.agenceVoyage.backend.service.interfaces.*;
 import com.agenceVoyage.backend.wrapper.ReservationData;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import org.modelmapper.ModelMapper;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.stereotype.Component;
 
 
@@ -15,6 +19,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 @Component
 public class ReservationFacade {
 
+    @PersistenceContext
+    private EntityManager entityManager;
 
     private final FacilityService facilityService;
 
@@ -27,6 +33,8 @@ public class ReservationFacade {
     private final TravelerService travelerService;
 
     private final TravelService travelService;
+    private final ModelMapper modelMapper;
+    private final LocalContainerEntityManagerFactoryBean entityManagerFactory;
 
 
     //preferring constructor injection over field injection for best practices usage
@@ -36,29 +44,41 @@ public class ReservationFacade {
             TravelerServiceImp travelerServiceImp,
             FacilityServiceImp facilityServiceImp,
             UserServiceImp userDetailsServiceImp,
-            TravelServiceImp travelServiceImp) {
+            TravelServiceImp travelServiceImp, ModelMapper modelMapper, LocalContainerEntityManagerFactoryBean entityManagerFactory) {
         this.roomService = roomServiceImp;
         this.reservationService = reservationServiceImp;
         this.travelerService = travelerServiceImp;
         this.facilityService = facilityServiceImp;
         this.userService = userDetailsServiceImp;
         this.travelService = travelServiceImp;
+        this.modelMapper = modelMapper;
+        this.entityManagerFactory = entityManagerFactory;
     }
 
 
     public ReservationDto createReservation(ReservationData reservationData) {
 
 
-        TravelDto travelDto = reservationData.getTravelDto();
-        ConcurrentLinkedQueue<RoomDto> roomDtos = reservationData.getRoomDtos();
+        TravelDto travelDto = travelService.getTravel(reservationData.getTravelId());
+
+        ConcurrentLinkedQueue<RoomDto> roomDtos = new ConcurrentLinkedQueue<>();
+        for (long id : reservationData.getRoomsIds()) {
+            roomDtos.add(modelMapper.map(roomService.getRoom(id), RoomDto.class));
+        }
+
         ConcurrentLinkedQueue<TravelerDto> travelerDtos = reservationData.getTravelerDtos();
-        ConcurrentLinkedQueue<FacilityDto> facilityDtos = reservationData.getFacilityDtos();
+        ConcurrentLinkedQueue<FacilityDto> facilityDtos = new ConcurrentLinkedQueue<>();
+
+        for (long id : reservationData.getFacilityIds()){
+            facilityDtos.add(modelMapper.map(facilityService.getFacilityById(id), FacilityDto.class));
+        }
+
         User user = userService.getUser(reservationData.getUserId());
         ConcurrentLinkedQueue<ReservationDto> reservationDtos = new ConcurrentLinkedQueue<>();
 
 
 
-        // 1.Flight necessary logic for reservation
+        // 1.travel necessary logic for reservation
         travelService.setTravelToReserve(travelDto, travelerDtos.size());
 
         // 2. Room necessary logic for reservation

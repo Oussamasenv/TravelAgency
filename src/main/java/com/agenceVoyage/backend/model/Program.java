@@ -34,7 +34,7 @@ public class Program {
     private String destination;
 
     @ManyToMany
-    @NotNull
+//    @NotNull
     private Collection<Filedata> filedatas;
 
 
